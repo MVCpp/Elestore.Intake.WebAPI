@@ -20,6 +20,7 @@ namespace Elestor.Intake.API.Controllers
         public IActionResult cadena(string cad)
         {
             EmptyClass emptyClass = new EmptyClass();
+            MySqlPemReader mySql = new MySqlPemReader();
 
             emptyClass.cadena = "Hola";
             return Ok(emptyClass);
