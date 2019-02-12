@@ -1,6 +1,9 @@
 ﻿using System;
 using Elestor.Intake.API.Models;
 using Microsoft.AspNetCore.Mvc;
+using MySql.Data;
+
+
 
 namespace Elestor.Intake.API.Controllers
 {
@@ -10,6 +13,7 @@ namespace Elestor.Intake.API.Controllers
     {
         public RegistroController()
         {
+
         }
 
         [HttpGet]
