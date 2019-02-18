@@ -3,33 +3,31 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Elestor.Intake.API.Interfaces;
+using Elestor.Intake.API.Managers;
 using Elestor.Intake.API.Models;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using MySql.Data;
-
-
 
 namespace Elestor.Intake.API.Controllers
 {
     [Produces("application/json")]
-    [Route("api/registro")]
-    public class RegistroController : Controller
+    [Route("api/usuario")]
+    public class LoginController : Controller
     {
-        readonly IRegistro _registro;
-        public RegistroController(IRegistro registro)
+        readonly ILogin _login;
+        private Usuario usuario;
+        public LoginController(ILogin login)
         {
-            _registro = registro ?? throw new ArgumentNullException(nameof(registro), "Cannot be null.");
+            _login = login ?? throw new ArgumentNullException(nameof(login), "Cannot be null.");
+            usuario = new Usuario();
         }
 
-        [HttpPost("usuario")]
-        public  async Task<object> Registro([FromBody] Usuario userModel)
+        [HttpPost("inicio")]
+        public async Task<object> IniciarSesion([FromBody] Usuario userModel)
         {
-
             object response = null;
             try
             {
-                response = await _registro.Registro(userModel);
+                response = await _login.Login(userModel);
             }
             catch (Exception e)
             {
@@ -41,5 +39,6 @@ namespace Elestor.Intake.API.Controllers
             }
             return response;
         }
+  
     }
 }
