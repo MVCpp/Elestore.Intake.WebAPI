@@ -23,4 +23,7 @@
   <ItemGroup>
     <None Remove="devLexSoftware\Next.git\Integrantes.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Managers\DataAccess.cs" />
+  </ItemGroup>
 </Project>
