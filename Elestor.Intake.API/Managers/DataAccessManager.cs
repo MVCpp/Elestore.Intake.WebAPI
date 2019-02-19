@@ -3,9 +3,9 @@ using Elestor.Intake.API.Interfaces;
 
 namespace Elestor.Intake.API.Managers
 {
-    public class DataAccess : IDataAccess
+    public class DataAccessManager : IDataAccess
     {
-        public DataAccess()
+        public DataAccessManager()
         {
         }
     }
