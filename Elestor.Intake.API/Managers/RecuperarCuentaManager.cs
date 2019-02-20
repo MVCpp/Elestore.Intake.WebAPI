@@ -7,17 +7,16 @@ namespace Elestor.Intake.API.Managers
 {
     public class RecuperarCuentaManager : IRecuperarCuenta
     {
-        public RecuperarCuentaManager()
+        readonly IDataAccess _dataAccess;
+
+        public RecuperarCuentaManager(IDataAccess dataAccess)
         {
+            _dataAccess = dataAccess;
         }
 
         public async Task<object> RecuperarCuenta(Usuario usuario)
         {
-            object response = null;
-            await Task.Run(() => {
-                // CAll db
-            });
-            return response;
+            return await _dataAccess.RecuperarCuenta(usuario);
         }
     }
 }

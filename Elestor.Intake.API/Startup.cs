@@ -24,6 +24,8 @@ namespace Elestor.Intake.API
             services.AddTransient<ILogin, LoginManager>();
             services.AddTransient<IRecuperarCuenta, RecuperarCuentaManager>();
             services.AddTransient<IRegistro, RegistroManager>();
+            services.AddTransient<IDataAccess, DataAccess.DataAccess>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

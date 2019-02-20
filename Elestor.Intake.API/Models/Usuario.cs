@@ -8,6 +8,7 @@ namespace Elestor.Intake.API.Models
            
         }
 
+        public string nombre { get; set; } = string.Empty;
         public string apellidoPaterno { get; set; } = string.Empty;
         public string apellidoMaterno { get; set; } = string.Empty;
         public string nombreUsuario { get; set; } = string.Empty;

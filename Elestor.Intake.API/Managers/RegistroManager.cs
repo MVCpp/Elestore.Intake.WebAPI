@@ -7,17 +7,16 @@ namespace Elestor.Intake.API.Managers
 {
     public class RegistroManager : IRegistro
     {
-        public RegistroManager()
+        readonly IDataAccess _dataAccess;
+
+        public RegistroManager(IDataAccess dataAccess)
         {
+            _dataAccess = dataAccess;
         }
 
         public async Task<object> Registro(Usuario usuario)
         {
-            object response = null;
-            await Task.Run(() => {
-                // CAll db
-            });
-            return response;
+           return await _dataAccess.Registro(usuario);
         }
     }
 }

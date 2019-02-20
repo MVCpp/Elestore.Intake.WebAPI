@@ -17,6 +17,7 @@ namespace Elestor.Intake.API.Controllers
     public class RegistroController : Controller
     {
         readonly IRegistro _registro;
+        
         public RegistroController(IRegistro registro)
         {
             _registro = registro ?? throw new ArgumentNullException(nameof(registro), "Cannot be null.");

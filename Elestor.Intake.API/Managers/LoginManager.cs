@@ -7,17 +7,16 @@ namespace Elestor.Intake.API.Managers
 {
     public class LoginManager : ILogin
     {
-        public LoginManager()
+        readonly IDataAccess _dataAccess;
+        
+        public LoginManager(IDataAccess dataAccess)
         {
+            _dataAccess = dataAccess;
         }
 
         public async Task<object> Login(Usuario usuario)
         {
-            object response = null;
-            await Task.Run(() => {
-                // CAll db
-            });
-            return response;
+            return await _dataAccess.Login(usuario);
         }
     }
 }
