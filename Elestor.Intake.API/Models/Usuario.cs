@@ -16,5 +16,7 @@ namespace Elestor.Intake.API.Models
         public string confirmPassword { get; set; } = string.Empty;
         public string email { get; set; } = string.Empty;
         public string numeroTelefonico { get; set; } = string.Empty;
+
+        public Negocio negocio { get; set; } = new Negocio();
     }
 }

@@ -3,6 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elestor.Intake.API", "Elestor.Intake.API\Elestor.Intake.API.csproj", "{B7273688-6D45-4123-9895-58799991ED96}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B803BA56-1A1B-4829-B1DC-7A1BF7D6E8AF}"
+	ProjectSection(SolutionItems) = preProject
+		Elestor.Intake.API\Properties\launchSettings.json = Elestor.Intake.API\Properties\launchSettings.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

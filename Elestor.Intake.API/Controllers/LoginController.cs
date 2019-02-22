@@ -14,22 +14,26 @@ namespace Elestor.Intake.API.Controllers
     public class LoginController : Controller
     {
         readonly ILogin _login;
+        private Usuario usuario;
 
         public LoginController(ILogin login)
         {
             _login = login ?? throw new ArgumentNullException(nameof(login), "Cannot be null.");
+            usuario = new Usuario();
         }
 
-        [HttpGet("inicio")]
+        [HttpPost("inicio")]
         public async Task<object> IniciarSesion([FromBody] Usuario userModel)
         {
             object response = null;
+
             try
             {
                 response = await _login.Login(userModel);
             }
             catch (Exception e)
             {
+
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
                     Content = new StringContent(e.Message),

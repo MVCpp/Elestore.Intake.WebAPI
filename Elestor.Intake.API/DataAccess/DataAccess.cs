@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 using Elestor.Intake.API.Interfaces;
 using Elestor.Intake.API.Models;
 using MySql.Data.MySqlClient;
+using Dapper;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace Elestor.Intake.API.DataAccess
 {
@@ -11,6 +14,14 @@ namespace Elestor.Intake.API.DataAccess
     {
         public DataAccess()
         {
+
+        }
+        public IDbConnection Connection
+        {
+            get
+            {
+                return new MySqlConnection("server=localhost;uid=root;pwd=sim0n11.;database=ELESTOR");
+            }
         }
 
         public async Task<object> Registro(Usuario usuario)
@@ -53,37 +64,27 @@ namespace Elestor.Intake.API.DataAccess
             return ret;
         }
 
-        public async Task<object> Login(Usuario usuario)
+        public async Task<IEnumerable<Usuario>> Login(Usuario usuario)
         {
-            object ret = new object();
-
-            await Task.Run(() => {
-
-                try
+        
+            try
+            {
+                using (IDbConnection conn = Connection)
                 {
-                    using (MySqlConnection conn = new MySqlConnection("server=localhost;uid=root;pwd=sim0n11.;database=ELESTOR"))
-                    {
-                        using (MySqlCommand cmd = new MySqlCommand("usp_Usuario_Select", conn))
-                        {
-                            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    conn.Open();
 
-                            conn.Open();
+                    var result = await conn.QueryAsync<Usuario>("usp_Usuario_Select",new {thispassword = usuario.password, thisemail = usuario.email},null,30000,CommandType.StoredProcedure);
 
-                            cmd.Parameters.Add(new MySqlParameter("thispassword", usuario.password));
-                            cmd.Parameters.Add(new MySqlParameter("thisemail", usuario.email));
+                    return result;
 
-                            ret = cmd.ExecuteReader();
-                            conn.Close();
-
-                        }
-                    }
                 }
-                catch (Exception ex)
-                {
-                    ret = ex.Message;
-                }
-            });
-            return ret;
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.Message);
+            }
+            return null;
+
         }
 
         public async Task<object> RecuperarCuenta(Usuario usuario)

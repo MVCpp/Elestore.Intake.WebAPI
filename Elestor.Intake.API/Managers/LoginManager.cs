@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Elestor.Intake.API.Interfaces;
 using Elestor.Intake.API.Models;
@@ -14,7 +16,7 @@ namespace Elestor.Intake.API.Managers
             _dataAccess = dataAccess;
         }
 
-        public async Task<object> Login(Usuario usuario)
+        public async Task<IEnumerable<Usuario>> Login(Usuario usuario)
         {
             return await _dataAccess.Login(usuario);
         }
