@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace Elestor.Intake.API.Models
 {
     public class Usuario
@@ -7,7 +9,7 @@ namespace Elestor.Intake.API.Models
         {
            
         }
-
+        public string clientid { get; set; } = string.Empty;
         public string nombre { get; set; } = string.Empty;
         public string apellidoPaterno { get; set; } = string.Empty;
         public string apellidoMaterno { get; set; } = string.Empty;
@@ -17,6 +19,6 @@ namespace Elestor.Intake.API.Models
         public string email { get; set; } = string.Empty;
         public string numeroTelefonico { get; set; } = string.Empty;
 
-        public Negocio negocio { get; set; } = new Negocio();
+        public List<Negocio> negocio { get; set; } = new List<Negocio>();
     }
 }
