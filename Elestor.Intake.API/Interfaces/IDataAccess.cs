@@ -14,5 +14,9 @@ namespace Elestor.Intake.API.Interfaces
         Task<object> RecuperarCuenta(Usuario usuario);
 
         Task<IEnumerable<Usuario>> Login(Usuario usuario);
+
+        Task<object> AgregarNegocio(Negocio negocio);
+
+        Task<IEnumerable<Negocio>> ObtenerNegocio(string clientid);
     }
 }

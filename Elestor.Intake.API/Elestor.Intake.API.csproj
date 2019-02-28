@@ -27,5 +27,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Managers\DataAccess.cs" />
+    <Compile Remove="Interfaces\IAgregarNegocio.cs" />
   </ItemGroup>
 </Project>
