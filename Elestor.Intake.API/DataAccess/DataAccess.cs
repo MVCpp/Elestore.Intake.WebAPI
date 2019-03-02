@@ -12,6 +12,8 @@
     {
         public class DataAccess : IDataAccess
         {
+        private string guid = String.Empty;
+
             public DataAccess()
             {
 
@@ -39,8 +41,7 @@
                                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
                                 conn.Open();
-                                Guid guid = new Guid();
-                                guid.ToString();
+                                var guid = System.Guid.NewGuid();
 
                                 cmd.Parameters.Add(new MySqlParameter("thisnombre", usuario.nombre));
                                 cmd.Parameters.Add(new MySqlParameter("thisapellidoPaterno", usuario.apellidoPaterno));
@@ -50,7 +51,7 @@
                                 cmd.Parameters.Add(new MySqlParameter("thisemail", usuario.email));
                                 cmd.Parameters.Add(new MySqlParameter("thisnumeroTelefonico", usuario.numeroTelefonico));
                                 cmd.Parameters.Add(new MySqlParameter("thisestatus", 1));
-                                cmd.Parameters.Add(new MySqlParameter("thisclientid", guid));
+                                cmd.Parameters.Add(new MySqlParameter("thisclientid", guid.ToString()));
 
 
                                 ret = cmd.ExecuteNonQuery();
@@ -138,8 +139,7 @@
                                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
                                 conn.Open();
-                                Guid guid = new Guid();
-                                guid.ToString();
+                                guid = System.Guid.NewGuid().ToString();
 
                                 cmd.Parameters.Add(new MySqlParameter("thisclientid", negocio.clientid));
                                 cmd.Parameters.Add(new MySqlParameter("thisnegocioid", negocio.negocioid));
@@ -209,8 +209,7 @@
                             cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
                             conn.Open();
-                            Guid guid = new Guid();
-                            guid.ToString();
+
 
                             cmd.Parameters.Add(new MySqlParameter("thisnombre", usuario.nombre));
                             cmd.Parameters.Add(new MySqlParameter("thisapellidoPaterno", usuario.apellidoPaterno));
