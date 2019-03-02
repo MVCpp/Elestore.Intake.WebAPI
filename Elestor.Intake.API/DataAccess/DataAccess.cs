@@ -142,6 +142,7 @@
                                 guid.ToString();
 
                                 cmd.Parameters.Add(new MySqlParameter("thisclientid", negocio.clientid));
+                                cmd.Parameters.Add(new MySqlParameter("thisnegocioid", negocio.negocioid));
                                 cmd.Parameters.Add(new MySqlParameter("thisnombre", negocio.nombre));
                                 cmd.Parameters.Add(new MySqlParameter("thiscallenumero", negocio.callenumero));
                                 cmd.Parameters.Add(new MySqlParameter("thiscolonia", negocio.colonia));
@@ -153,6 +154,8 @@
                                 cmd.Parameters.Add(new MySqlParameter("thiscategoria", negocio.categoria));
                                 cmd.Parameters.Add(new MySqlParameter("thissubcategoria", negocio.subcategoria));
                                 cmd.Parameters.Add(new MySqlParameter("thisdescripcion", negocio.descripcion));
+                                cmd.Parameters.Add(new MySqlParameter("thislatitud", negocio.latitud));
+                                cmd.Parameters.Add(new MySqlParameter("thislongitud", negocio.longitud));
 
 
 
@@ -189,6 +192,49 @@
             {
                 return  null;
             }
+        }
+
+        public async Task<object> Actualizar(Usuario usuario)
+        {
+            object ret = new object();
+
+            await Task.Run(() => {
+
+                try
+                {
+                    using (MySqlConnection conn = new MySqlConnection("server=localhost;uid=root;pwd=sim0n11.;database=ELESTOR"))
+                    {
+                        using (MySqlCommand cmd = new MySqlCommand("usp_Cuenta_Update", conn))
+                        {
+                            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                            conn.Open();
+                            Guid guid = new Guid();
+                            guid.ToString();
+
+                            cmd.Parameters.Add(new MySqlParameter("thisnombre", usuario.nombre));
+                            cmd.Parameters.Add(new MySqlParameter("thisapellidoPaterno", usuario.apellidoPaterno));
+                            cmd.Parameters.Add(new MySqlParameter("thisapellidoMaterno", usuario.apellidoMaterno));
+                            cmd.Parameters.Add(new MySqlParameter("thisnombreUsuario", usuario.nombreUsuario));
+                            cmd.Parameters.Add(new MySqlParameter("thispassword", usuario.password));
+                            cmd.Parameters.Add(new MySqlParameter("thisemail", usuario.email));
+                            cmd.Parameters.Add(new MySqlParameter("thisnumeroTelefonico", usuario.numeroTelefonico));
+                            cmd.Parameters.Add(new MySqlParameter("thisestatus", 1));
+                            cmd.Parameters.Add(new MySqlParameter("thisclientid", usuario.clientid));
+
+
+                            ret = cmd.ExecuteNonQuery();
+                            conn.Close();
+
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ret = ex.Message;
+                }
+            });
+            return ret;
         }
     }
 }

@@ -7,5 +7,7 @@ namespace Elestor.Intake.API.Interfaces
     public interface IRecuperarCuenta
     {
         Task<object> RecuperarCuenta(Usuario usuario);
+
+        Task<object> Actualizar(Usuario usuario);
     }
 }

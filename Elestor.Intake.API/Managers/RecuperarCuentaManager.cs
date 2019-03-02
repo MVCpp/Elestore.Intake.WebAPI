@@ -18,5 +18,10 @@ namespace Elestor.Intake.API.Managers
         {
             return await _dataAccess.RecuperarCuenta(usuario);
         }
+
+        public async Task<object> Actualizar(Usuario usuario)
+        {
+            return await _dataAccess.Actualizar(usuario);
+        }
     }
 }

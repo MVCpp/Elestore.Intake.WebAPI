@@ -38,6 +38,26 @@ namespace Elestor.Intake.API.Controllers
             }
             return response;
         }
-      
+
+
+        [HttpPost("actualizar")]
+        public async Task<object> Actualizar([FromBody] Usuario userModel)
+        {
+            object response = null;
+            try
+            {
+                response = await _recuperarCuenta.Actualizar(userModel);
+            }
+            catch (Exception e)
+            {
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent(e.Message),
+                    ReasonPhrase = e.Message
+                };
+            }
+            return response;
+        }
+
     }
 }
