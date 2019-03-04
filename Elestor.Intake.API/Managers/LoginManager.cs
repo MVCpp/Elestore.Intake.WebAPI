@@ -18,7 +18,18 @@ namespace Elestor.Intake.API.Managers
 
         public async Task<IEnumerable<Usuario>> Login(Usuario usuario)
         {
-            return await _dataAccess.Login(usuario);
+            IEnumerable<Usuario> response;
+
+            try
+            {
+                response = await _dataAccess.Login(usuario);
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
+
+            return response;
         }
     }
 }

@@ -12,8 +12,6 @@
     {
         public class DataAccess : IDataAccess
         {
-        private string guid = String.Empty;
-
             public DataAccess()
             {
 
@@ -26,9 +24,9 @@
                 }
             }
 
-            public async Task<object> Registro(Usuario usuario)
+            public async Task<Usuario> Registro(Usuario usuario)
             {
-                object ret = new object();
+                Usuario ret = null;
 
                 await Task.Run(() => {
 
@@ -54,7 +52,24 @@
                                 cmd.Parameters.Add(new MySqlParameter("thisclientid", guid.ToString()));
 
 
-                                ret = cmd.ExecuteNonQuery();
+                                MySqlDataReader dataReader = cmd.ExecuteReader();
+
+                                if(dataReader.HasRows)
+                                {
+                                    ret = new Usuario();
+
+                                    while (dataReader.Read())
+                                    {
+                                        ret.nombre = dataReader["nombre"].ToString();
+                                        ret.apellidoPaterno = dataReader["apellidoPaterno"].ToString();
+                                        ret.apellidoMaterno = dataReader["apellidoMaterno"].ToString();
+                                        ret.nombreUsuario = dataReader["nombreUsuario"].ToString();
+                                        ret.password = dataReader["password"].ToString();
+                                        ret.email = dataReader["email"].ToString();
+                                        ret.numeroTelefonico = dataReader["numeroTelefonico"].ToString();
+                                        ret.clientid = dataReader["clientid"].ToString();
+                                    }
+                                }
                                 conn.Close();
 
                             }
@@ -62,7 +77,7 @@
                     }
                     catch (Exception ex)
                     {
-                        ret = ex.Message;
+                        ret = null;
                     }
                 });
                 return ret;
@@ -139,7 +154,7 @@
                                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
                                 conn.Open();
-                                guid = System.Guid.NewGuid().ToString();
+                                var guid = System.Guid.NewGuid().ToString();
 
                                 cmd.Parameters.Add(new MySqlParameter("thisclientid", negocio.clientid));
                                 cmd.Parameters.Add(new MySqlParameter("thisnegocioid", negocio.negocioid));
@@ -156,8 +171,6 @@
                                 cmd.Parameters.Add(new MySqlParameter("thisdescripcion", negocio.descripcion));
                                 cmd.Parameters.Add(new MySqlParameter("thislatitud", negocio.latitud));
                                 cmd.Parameters.Add(new MySqlParameter("thislongitud", negocio.longitud));
-
-
 
                                 ret = cmd.ExecuteNonQuery();
                                 conn.Close();

@@ -17,12 +17,34 @@ namespace Elestor.Intake.API.Managers
 
         public async Task<object> AgregarNegocio(Negocio negocio)
         {
-            return await _dataAccess.AgregarNegocio(negocio);
+            object response = null;
+
+            try
+            {
+                response = await _dataAccess.AgregarNegocio(negocio);
+            }
+            catch(Exception ex)
+            {
+                response = ex; 
+            }
+
+            return response;
         }
 
         public async Task<IEnumerable<Negocio>> ObtenerNegocio(string clientid)
         {
-            return await _dataAccess.ObtenerNegocio(clientid);
+            IEnumerable<Negocio> response = null;
+
+            try
+            {
+               response = await _dataAccess.ObtenerNegocio(clientid);
+            }
+            catch(Exception ex)
+            {
+               return null; 
+            }
+
+            return response;
         }
     }
 }

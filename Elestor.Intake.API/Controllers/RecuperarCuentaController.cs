@@ -14,7 +14,6 @@ namespace Elestor.Intake.API.Controllers
     {
         readonly IRecuperarCuenta _recuperarCuenta;
 
-
         public RecuperarCuentaController(IRecuperarCuenta recuperarCuenta)
         {
             _recuperarCuenta = recuperarCuenta ?? throw new ArgumentNullException(nameof(recuperarCuenta), "Cannot be null."); ;

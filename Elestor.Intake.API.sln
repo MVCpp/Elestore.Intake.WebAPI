@@ -21,4 +21,14 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = PrefixedHierarchical
+		$0.StandardHeader = $2
+		$0.VersionControlPolicy = $3
+		$3.CommitMessageStyle = $4
+		$4.Indent = @\t
+		$4.IncludeDirectoryPaths = True
+	EndGlobalSection
 EndGlobal
