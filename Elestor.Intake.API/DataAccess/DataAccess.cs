@@ -20,9 +20,10 @@
             {
                 get
                 {
-                    return new MySqlConnection("server=localhost;uid=root;pwd=sim0n11.;database=ELESTOR");
+                return new MySqlConnection(Constants.ConnectionString);
+
                 }
-            }
+        }
 
             public async Task<Usuario> Registro(Usuario usuario)
             {
@@ -32,11 +33,12 @@
 
                     try
                     {
-                        using (MySqlConnection conn = new MySqlConnection("server=localhost;uid=root;pwd=sim0n11.;database=ELESTOR"))
+                        using (MySqlConnection conn = new MySqlConnection(Constants.ConnectionString))
                         {
                             using (MySqlCommand cmd = new MySqlCommand("usp_Usuario_Insert", conn))
                             {
                                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                                cmd.CommandTimeout = 0;
 
                                 conn.Open();
                                 var guid = System.Guid.NewGuid();
@@ -88,11 +90,13 @@
             
                 try
                 {
+               
                     using (IDbConnection conn = Connection)
                     {
+                      
                         conn.Open();
 
-                        var result = await conn.QueryAsync<Usuario>("usp_Usuario_Select",new {thispassword = usuario.password, thisemail = usuario.email},null,30000,CommandType.StoredProcedure);
+                        var result = await conn.QueryAsync<Usuario>("usp_Usuario_Select",new {thispassword = usuario.password, thisemail = usuario.email},null,3000000,CommandType.StoredProcedure);
 
                         return result;
 
@@ -114,7 +118,7 @@
 
                     try
                     {
-                        using (MySqlConnection conn = new MySqlConnection("server=localhost;uid=root;pwd=sim0n11.;database=ELESTOR"))
+                        using (MySqlConnection conn = new MySqlConnection(Constants.ConnectionString))
                         {
                             using (MySqlCommand cmd = new MySqlCommand("usp_Usuario_Update", conn))
                             {
@@ -147,7 +151,7 @@
 
                     try
                     {
-                        using (MySqlConnection conn = new MySqlConnection("server=localhost;uid=root;pwd=sim0n11.;database=ELESTOR"))
+                        using (MySqlConnection conn = new MySqlConnection(Constants.ConnectionString))
                         {
                             using (MySqlCommand cmd = new MySqlCommand("usp_Negocio_Insert", conn))
                             {
@@ -215,7 +219,7 @@
 
                 try
                 {
-                    using (MySqlConnection conn = new MySqlConnection("server=localhost;uid=root;pwd=sim0n11.;database=ELESTOR"))
+                    using (MySqlConnection conn = new MySqlConnection(Constants.ConnectionString))
                     {
                         using (MySqlCommand cmd = new MySqlCommand("usp_Cuenta_Update", conn))
                         {
