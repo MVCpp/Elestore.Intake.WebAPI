@@ -171,7 +171,7 @@
                                 cmd.Parameters.Add(new MySqlParameter("thishoraapertura", negocio.horaapertura));
                                 cmd.Parameters.Add(new MySqlParameter("thishoracierre", negocio.horacierre));
                                 cmd.Parameters.Add(new MySqlParameter("thiscategoria", negocio.categoria));
-                                cmd.Parameters.Add(new MySqlParameter("thissubcategoria", negocio.subcategoria));
+                                cmd.Parameters.Add(new MySqlParameter("thissubcategoria", negocio.FK_subcategoria));
                                 cmd.Parameters.Add(new MySqlParameter("thisdescripcion", negocio.descripcion));
                                 cmd.Parameters.Add(new MySqlParameter("thislatitud", negocio.latitud));
                                 cmd.Parameters.Add(new MySqlParameter("thislongitud", negocio.longitud));
@@ -251,6 +251,46 @@
                 }
             });
             return ret;
+        }
+
+        public async Task<IEnumerable<CatNegocio>> ObtenerCatNegocio()
+        {
+            try
+            {
+                using (IDbConnection conn = Connection)
+                {
+                    conn.Open();
+
+                    var result = await conn.QueryAsync<CatNegocio>("usp_CatNegocio_Select", null, null, 30000, CommandType.StoredProcedure);
+
+                    return result;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<IEnumerable<SubCatNegocio>> ObtenerSubCatNegocio(int id)
+        {
+            try
+            {
+                using (IDbConnection conn = Connection)
+                {
+                    conn.Open();
+
+                    var result = await conn.QueryAsync<SubCatNegocio>("usp_SubCatNegocio_Select", new { catid = id }, null, 30000, CommandType.StoredProcedure);
+
+                    return result;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

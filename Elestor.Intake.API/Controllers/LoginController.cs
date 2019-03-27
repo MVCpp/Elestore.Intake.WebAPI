@@ -41,5 +41,13 @@ namespace Elestor.Intake.API.Controllers
             }
             return response;
         }
+
+
+
+        [HttpPost("hola")]
+        public string hola()
+        {
+            return "hi from aws";
+        }
     }
 }
