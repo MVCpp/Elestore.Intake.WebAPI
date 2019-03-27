@@ -64,7 +64,7 @@ namespace Elestor.Intake.API.Controllers
 
 
         [HttpPost("catnegocio")]
-        public async Task<object> ObtenerCatNegocio()
+        public async Task<object> ObtenerCatNegocio([FromBody] int id = 0)
         {
             object response = null;
 
@@ -85,7 +85,7 @@ namespace Elestor.Intake.API.Controllers
         }
 
         [HttpPost("subcatnegocio")]
-        public async Task<object> ObtenerSubCatNegocio(int id)
+        public async Task<object> ObtenerSubCatNegocio([FromBody]int id)
         {
             object response = null;
 
