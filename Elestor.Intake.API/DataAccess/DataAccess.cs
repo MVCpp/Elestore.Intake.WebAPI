@@ -159,6 +159,7 @@
 
                                 conn.Open();
                                 var guid = System.Guid.NewGuid().ToString();
+                                negocio.negocioid = guid.ToString();
 
                                 cmd.Parameters.Add(new MySqlParameter("thisclientid", negocio.clientid));
                                 cmd.Parameters.Add(new MySqlParameter("thisnegocioid", negocio.negocioid));
@@ -175,6 +176,7 @@
                                 cmd.Parameters.Add(new MySqlParameter("thisdescripcion", negocio.descripcion));
                                 cmd.Parameters.Add(new MySqlParameter("thislatitud", negocio.latitud));
                                 cmd.Parameters.Add(new MySqlParameter("thislongitud", negocio.longitud));
+                                cmd.Parameters.Add(new MySqlParameter("thisactive", negocio.active));
 
                                 ret = cmd.ExecuteNonQuery();
                                 conn.Close();
@@ -201,7 +203,7 @@
 
                     var result = await conn.QueryAsync<Negocio>("usp_Negocio_Select", new { thisclientid = clientid }, null, 30000, CommandType.StoredProcedure);
 
-                    return result;
+                        return result;
 
                 }
             }
@@ -292,5 +294,97 @@
                 return null;
             }
         }
+
+        public async Task<IEnumerable<Producto>> ObtenerProductos(int clientid)
+        {
+            try
+            {
+                using (IDbConnection conn = Connection)
+                {
+                    conn.Open();
+
+                    var result = await conn.QueryAsync<Producto>("usp_Producto_Select", new { clientid = clientid }, null, 30000, CommandType.StoredProcedure);
+
+                    return result;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+        public async Task<object> GuardarProducto(Producto producto)
+        {
+            object ret = new object();
+
+            await Task.Run(() => {
+
+                try
+                {
+                    using (MySqlConnection conn = new MySqlConnection(Constants.ConnectionString))
+                    {
+                        using (MySqlCommand cmd = new MySqlCommand("usp_Producto_Insert", conn))
+                        {
+                            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                            conn.Open();
+
+
+                           
+
+
+                            ret = cmd.ExecuteNonQuery();
+                            conn.Close();
+
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ret = ex.Message;
+                }
+            });
+            return ret;
+        }
+
+        public async Task<object> NegocioEditar(Negocio negocio)
+        {
+            try
+            {
+                using (IDbConnection conn = Connection)
+                {
+                    conn.Open();
+
+                    var result = conn.ExecuteScalar("usp_Negocio_Update", 
+                        new { thisclientid = negocio.clientid
+                            , thisnegocioid = negocio.negocioid
+                            , thisnombre = negocio.nombre
+                            , thiscallenumero = negocio.callenumero
+                            , thiscolonia = negocio.colonia
+                            , thisciudad = negocio.ciudad
+                            , thisestado = negocio.estado
+                            , thiscodigopostal = negocio.codigopostal
+                            , thishoraapertura = negocio.horaapertura
+                            , thishoracierre = negocio.horacierre
+                            , thiscategoria = negocio.categoria
+                            , thissubcategoria = negocio.FK_subcategoria
+                            , thisdescripcion = negocio.descripcion
+                            , thislatitud = negocio.latitud
+                            , thislongitud = negocio.longitud
+                            , thisactive = negocio.active},null,30000,CommandType.StoredProcedure);
+
+                    return  1;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
     }
 }

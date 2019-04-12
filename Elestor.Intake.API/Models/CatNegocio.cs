@@ -7,10 +7,10 @@ namespace Elestor.Intake.API.Models
         {
         }
 
-        int id_catNegocio { get; set; } = -1;
+        public int id_catNegocio { get; set; } = -1;
 
-        string nombre { get; set; } = String.Empty;
+        public string nombre { get; set; } = String.Empty;
 
-        string descripcion { get; set; } = String.Empty;
+        public string descripcion { get; set; } = String.Empty;
     }
 }

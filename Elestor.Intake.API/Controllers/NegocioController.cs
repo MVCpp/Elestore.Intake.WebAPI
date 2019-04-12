@@ -104,5 +104,26 @@ namespace Elestor.Intake.API.Controllers
             }
             return response;
         }
+
+        [HttpPost("editar")]
+        public async Task<object> NegocioEditar([FromBody] Negocio negocio)
+        {
+            object response = null;
+
+            try
+            {
+                response = await _negocio.NegocioEditar(negocio);
+            }
+            catch (Exception e)
+            {
+
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent(e.Message),
+                    ReasonPhrase = e.Message
+                };
+            }
+            return response;
+        }
     }
 }

@@ -9,3 +9,4 @@ namespace Elestor.Intake.API.DataAccess
         //public string ConnectionString { get; set; } = "server=localhost;uid=root;pwd=sim0n11.;database=ELESTOR";
     }
 }
+    

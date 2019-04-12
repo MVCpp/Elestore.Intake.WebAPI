@@ -78,5 +78,22 @@ namespace Elestor.Intake.API.Managers
 
             return response;
         }
+
+
+        public async Task<object> NegocioEditar(Negocio negocio)
+        {
+            object response = null;
+
+            try
+            {
+                response = await _dataAccess.NegocioEditar(negocio);
+            }
+            catch (Exception ex)
+            {
+                response = ex;
+            }
+
+            return response;
+        }
     }
 }
