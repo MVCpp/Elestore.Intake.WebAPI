@@ -24,6 +24,7 @@
             public string latitud { get; set; } = string.Empty;
             public string longitud { get; set; } = string.Empty;
             public int active { get; set; } = 1;
+            public string fotografia { get; set; } = String.Empty;
 
         }
     }

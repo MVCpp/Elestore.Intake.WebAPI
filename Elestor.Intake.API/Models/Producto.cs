@@ -16,5 +16,6 @@ namespace Elestor.Intake.API.Models
         public double cantidad { get; set; } = 0.0;
         public double precio { get; set; } = 0.0;
         public int FK_idNegocio { get; set; } = -1;
+
     }
 }

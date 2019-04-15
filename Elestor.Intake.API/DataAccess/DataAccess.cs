@@ -23,7 +23,7 @@
                 return new MySqlConnection(Constants.ConnectionString);
 
                 }
-        }
+            }
 
             public async Task<Usuario> Registro(Usuario usuario)
             {
@@ -203,8 +203,8 @@
 
                     var result = await conn.QueryAsync<Negocio>("usp_Negocio_Select", new { thisclientid = clientid }, null, 30000, CommandType.StoredProcedure);
 
-                        return result;
-
+                    return result;
+                
                 }
             }
             catch (Exception ex)
