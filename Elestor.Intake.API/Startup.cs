@@ -33,6 +33,7 @@ namespace Elestor.Intake.API
             services.AddTransient<IRecuperarCuenta, RecuperarCuentaManager>();
             services.AddTransient<IRegistro, RegistroManager>();
             services.AddTransient<INegocio, NegocioManager>();
+            services.AddTransient<IProducto, ProductoManager>();
             services.AddTransient<IDataAccess, DataAccess.DataAccess>();
 
         }

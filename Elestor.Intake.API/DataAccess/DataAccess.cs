@@ -295,7 +295,7 @@
             }
         }
 
-        public async Task<IEnumerable<Producto>> ObtenerProductos(int clientid)
+        public async Task<IEnumerable<Producto>> ObtenerProductos(string clientid)
         {
             try
             {
@@ -320,34 +320,38 @@
         {
             object ret = new object();
 
-            await Task.Run(() => {
-
                 try
                 {
-                    using (MySqlConnection conn = new MySqlConnection(Constants.ConnectionString))
-                    {
-                        using (MySqlCommand cmd = new MySqlCommand("usp_Producto_Insert", conn))
-                        {
-                            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
+                  using(IDbConnection conn = Connection) 
+                  { 
+                           
                             conn.Open();
 
 
-                           
+                           var result = conn.ExecuteScalar("usp_Producto_Insert", 
+                                new { nombre = producto.nombre
+                                    , descripcion = producto.descripcion
+                                    , clave = producto.clave
+                                    , estatus = producto.estatus
+                                    , fotografia = producto.fotografia
+                                    , cantidad = producto.cantidad
+                                    , precio = producto.precio
+                                    , FK_idNegocio = producto.FK_idNegocio
+                                    , negocioid = producto.negocioid}
+                                    ,null,30000,CommandType.StoredProcedure);
+                        conn.Close();
 
+                        return  1;
 
-                            ret = cmd.ExecuteNonQuery();
-                            conn.Close();
 
                         }
-                    }
+                    
                 }
                 catch (Exception ex)
                 {
-                    ret = ex.Message;
+                    return null;
                 }
-            });
-            return ret;
+
         }
 
         public async Task<object> NegocioEditar(Negocio negocio)
@@ -374,7 +378,8 @@
                             , thisdescripcion = negocio.descripcion
                             , thislatitud = negocio.latitud
                             , thislongitud = negocio.longitud
-                            , thisactive = negocio.active},null,30000,CommandType.StoredProcedure);
+                            , thisactive = negocio.active}
+                            ,null,30000,CommandType.StoredProcedure);
 
                     return  1;
 
