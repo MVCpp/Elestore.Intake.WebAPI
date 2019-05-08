@@ -297,7 +297,7 @@
             }
         }
 
-        public async Task<IEnumerable<Producto>> ObtenerProductos(string clientid)
+        public async Task<IEnumerable<Producto>> ObtenerProductos(Negocio negocio)
         {
             try
             {
@@ -305,7 +305,7 @@
                 {
                     conn.Open();
 
-                    var result = await conn.QueryAsync<Producto>("usp_Producto_Select", new { clientid = clientid }, null, 30000, CommandType.StoredProcedure);
+                    var result = await conn.QueryAsync<Producto>("usp_Producto_Select", new { thisnegocioid = negocio.clientid }, null, 30000, CommandType.StoredProcedure);
 
                     return result;
 
@@ -338,7 +338,6 @@
                                     , fotografia = producto.fotografia
                                     , cantidad = producto.cantidad
                                     , precio = producto.precio
-                                    , FK_idNegocio = producto.FK_idNegocio
                                     , negocioid = producto.negocioid}
                                     ,null,30000,CommandType.StoredProcedure);
                         conn.Close();

@@ -31,13 +31,13 @@ namespace Elestor.Intake.API.Managers
             return response;
         }
 
-        public async Task<IEnumerable<Producto>> ObtenerProducto(string negocioid)
+        public async Task<IEnumerable<Producto>> ObtenerProducto(Negocio negocio)
         {
             IEnumerable<Producto> response = null;
 
             try
             {
-                response = await _dataAccess.ObtenerProductos(negocioid);
+                response = await _dataAccess.ObtenerProductos(negocio);
 
             }
             catch (Exception ex)

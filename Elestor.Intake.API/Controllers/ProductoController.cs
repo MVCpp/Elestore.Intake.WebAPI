@@ -20,13 +20,13 @@ namespace Elestor.Intake.API.Controllers
         }
 
         [HttpPost("obtener")]
-        public async Task<object> ObtenerProducto([FromBody]string negocioid)
+        public async Task<object> ObtenerProducto([FromBody]Negocio negocio)
         {
             object response = null;
 
             try
             {
-                response = await _producto.ObtenerProducto(negocioid);
+                response = await _producto.ObtenerProducto(negocio);
             }
             catch (Exception e)
             {
