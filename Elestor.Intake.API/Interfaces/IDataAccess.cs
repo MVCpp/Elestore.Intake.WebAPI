@@ -28,5 +28,7 @@ namespace Elestor.Intake.API.Interfaces
         Task<IEnumerable<Producto>> ObtenerProductos(Negocio negocio);
 
         Task<object> GuardarProducto(Producto producto);
+
+        Task<IEnumerable<Producto>> BorrarProducto(Producto negocio);
     }
 }

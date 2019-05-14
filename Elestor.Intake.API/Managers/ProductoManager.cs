@@ -47,5 +47,22 @@ namespace Elestor.Intake.API.Managers
 
             return response;
         }
+
+        public async Task<IEnumerable<Producto>> BorrarProducto(Producto producto)
+        {
+            IEnumerable<Producto> response = null;
+
+            try
+            {
+                response = await _dataAccess.BorrarProducto(producto);
+
+            }
+            catch (Exception ex)
+            {
+                response = null;
+            }
+
+            return response;
+        }
     }
 }

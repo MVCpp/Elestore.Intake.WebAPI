@@ -50,7 +50,7 @@
                                 cmd.Parameters.Add(new MySqlParameter("thispassword", usuario.password));
                                 cmd.Parameters.Add(new MySqlParameter("thisemail", usuario.email));
                                 cmd.Parameters.Add(new MySqlParameter("thisnumeroTelefonico", usuario.numeroTelefonico));
-                                cmd.Parameters.Add(new MySqlParameter("thisfotografia", usuario.fotografia));
+                                cmd.Parameters.Add(new MySqlParameter("thisografia", usuario.fotografia));
                                 cmd.Parameters.Add(new MySqlParameter("thisestatus", 1));
                                 cmd.Parameters.Add(new MySqlParameter("thisclientid", guid.ToString()));
 
@@ -70,7 +70,7 @@
                                         ret.password = dataReader["password"].ToString();
                                         ret.email = dataReader["email"].ToString();
                                         ret.numeroTelefonico = dataReader["numeroTelefonico"].ToString();
-                                        ret.fotografia = dataReader["fotografia"].ToString();
+                                        ret.fotografia = (byte[])dataReader["fotografia"];
                                         ret.clientid = dataReader["clientid"].ToString();
                                     }
                                 }
@@ -389,6 +389,28 @@
             catch (Exception ex)
             {
                 return 0;
+            }
+        }
+
+        public async Task<IEnumerable<Producto>> BorrarProducto(Producto producto)
+        {
+            try
+            {
+                using (IDbConnection conn = Connection)
+                {
+                    conn.Open();
+
+                    var result = await conn.QueryAsync<Producto>("usp_Producto_Delete", 
+                        new { thisnegocioid = producto.negocioid, 
+                        thisproductoid = producto.id_producto}, null, 30000, CommandType.StoredProcedure);
+
+                    return result;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
             }
         }
 

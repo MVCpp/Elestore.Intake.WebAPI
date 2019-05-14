@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -49,6 +50,27 @@ namespace Elestor.Intake.API.Controllers
             try
             {
                 response = await _producto.GuardarProducto(producto);
+            }
+            catch (Exception e)
+            {
+
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent(e.Message),
+                    ReasonPhrase = e.Message
+                };
+            }
+            return response;
+        }
+
+        [HttpPost("borrar")]
+        public async Task<object> BorrarProductos([FromBody]Producto producto)
+        {
+            IEnumerable<Producto> response = null;
+
+            try
+            {
+                response = await _producto.BorrarProducto(producto);
             }
             catch (Exception e)
             {
