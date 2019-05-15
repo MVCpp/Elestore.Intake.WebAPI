@@ -50,7 +50,7 @@
                                 cmd.Parameters.Add(new MySqlParameter("thispassword", usuario.password));
                                 cmd.Parameters.Add(new MySqlParameter("thisemail", usuario.email));
                                 cmd.Parameters.Add(new MySqlParameter("thisnumeroTelefonico", usuario.numeroTelefonico));
-                                cmd.Parameters.Add(new MySqlParameter("thisografia", usuario.fotografia));
+                                cmd.Parameters.Add(new MySqlParameter("thisfotografia", usuario.fotografia));
                                 cmd.Parameters.Add(new MySqlParameter("thisestatus", 1));
                                 cmd.Parameters.Add(new MySqlParameter("thisclientid", guid.ToString()));
 
@@ -70,7 +70,7 @@
                                         ret.password = dataReader["password"].ToString();
                                         ret.email = dataReader["email"].ToString();
                                         ret.numeroTelefonico = dataReader["numeroTelefonico"].ToString();
-                                        ret.fotografia = (byte[])dataReader["fotografia"];
+                                        ret.fotografia = dataReader["fotografia"].ToString();
                                         ret.clientid = dataReader["clientid"].ToString();
                                     }
                                 }
@@ -179,6 +179,8 @@
                                 cmd.Parameters.Add(new MySqlParameter("thislatitud", negocio.latitud));
                                 cmd.Parameters.Add(new MySqlParameter("thislongitud", negocio.longitud));
                                 cmd.Parameters.Add(new MySqlParameter("thisactive", negocio.active));
+                                cmd.Parameters.Add(new MySqlParameter("thisfotografia", negocio.fotografia));
+                                cmd.Parameters.Add(new MySqlParameter("thisfotografia2", negocio.fotografia2));
 
                                 ret = cmd.ExecuteNonQuery();
                                 conn.Close();
@@ -241,6 +243,7 @@
                             cmd.Parameters.Add(new MySqlParameter("thisnumeroTelefonico", usuario.numeroTelefonico));
                             cmd.Parameters.Add(new MySqlParameter("thisestatus", 1));
                             cmd.Parameters.Add(new MySqlParameter("thisclientid", usuario.clientid));
+                            cmd.Parameters.Add(new MySqlParameter("thisfotografia",usuario.fotografia));
 
 
                             ret = cmd.ExecuteNonQuery();
@@ -379,7 +382,8 @@
                             , thisdescripcion = negocio.descripcion
                             , thislatitud = negocio.latitud
                             , thislongitud = negocio.longitud
-                            , thisactive = negocio.active}
+                            , thisactive = negocio.active
+                            , thisfotografia = negocio.fotografia}
                             ,null,30000,CommandType.StoredProcedure);
 
                     return  1;

@@ -29,5 +29,7 @@
   <ItemGroup>
     <Compile Remove="Managers\DataAccess.cs" />
     <Compile Remove="Interfaces\IAgregarNegocio.cs" />
+    <Compile Remove="Helpers\CorreoConfirmacion.cs" />
+    <Compile Remove="Interfaces\ICorreoConfirmacion.cs" />
   </ItemGroup>
 </Project>

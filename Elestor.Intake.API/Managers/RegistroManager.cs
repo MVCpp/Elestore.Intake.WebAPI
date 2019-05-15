@@ -9,9 +9,9 @@ namespace Elestor.Intake.API.Managers
     {
         readonly IDataAccess _dataAccess;
 
-        public RegistroManager(IDataAccess dataAccess)
+        public RegistroManager(IDataAccess dataAcces)
         {
-            _dataAccess = dataAccess;
+            _dataAccess = dataAcces;
         }
 
         public async Task<Usuario> Registro(Usuario usuario)
