@@ -25,9 +25,9 @@
                 }
             }
 
-            public async Task<Usuario> Registro(Usuario usuario)
+            public async Task<bool> Registro(Usuario usuario)
             {
-                Usuario ret = null;
+                bool ret = false;
 
                 await Task.Run(() => {
 
@@ -55,33 +55,17 @@
                                 cmd.Parameters.Add(new MySqlParameter("thisclientid", guid.ToString()));
 
 
-                                MySqlDataReader dataReader = cmd.ExecuteReader();
-
-                                if(dataReader.HasRows)
-                                {
-                                    ret = new Usuario();
-
-                                    while (dataReader.Read())
-                                    {
-                                        ret.nombre = dataReader["nombre"].ToString();
-                                        ret.apellidoPaterno = dataReader["apellidoPaterno"].ToString();
-                                        ret.apellidoMaterno = dataReader["apellidoMaterno"].ToString();
-                                        ret.nombreUsuario = dataReader["nombreUsuario"].ToString();
-                                        ret.password = dataReader["password"].ToString();
-                                        ret.email = dataReader["email"].ToString();
-                                        ret.numeroTelefonico = dataReader["numeroTelefonico"].ToString();
-                                        ret.fotografia = dataReader["fotografia"].ToString();
-                                        ret.clientid = dataReader["clientid"].ToString();
-                                    }
-                                }
+                               cmd.ExecuteNonQuery();
                                 conn.Close();
+
+                                ret = true;
 
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        ret = null;
+                        ret = false;
                     }
                 });
                 return ret;

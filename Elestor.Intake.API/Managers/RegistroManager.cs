@@ -14,18 +14,18 @@ namespace Elestor.Intake.API.Managers
             _dataAccess = dataAcces;
         }
 
-        public async Task<Usuario> Registro(Usuario usuario)
+        public async Task<bool> Registro(Usuario usuario)
         {
-            Usuario response = null;
+            bool response = false;
 
             try
             {
-                response = new Usuario();
+
                 response = await _dataAccess.Registro(usuario);
             }
             catch(Exception ex)
             {
-                response = null;
+                response = false;
             }
 
             return response;

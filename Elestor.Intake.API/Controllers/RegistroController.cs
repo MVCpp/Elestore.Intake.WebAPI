@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -17,10 +19,12 @@ namespace Elestor.Intake.API.Controllers
     public class RegistroController : Controller
     {
         readonly IRegistro _registro;
+        readonly ILogin _login;
         
-        public RegistroController(IRegistro registro)
+        public RegistroController(IRegistro registro, ILogin login)
         {
             _registro = registro ?? throw new ArgumentNullException(nameof(registro), "Cannot be null.");
+            _login = login ?? throw new ArgumentNullException(nameof(login), "Cannot be null.");
         }
 
         [HttpPost("usuario")]
@@ -28,9 +32,15 @@ namespace Elestor.Intake.API.Controllers
         {
 
             object response = null;
+            IEnumerable<Usuario> usuario = null;
             try
             {
                 response = await _registro.Registro(userModel);
+
+                if(Convert.ToBoolean(response))
+                {
+                    usuario = await _login.Login(userModel);
+                }
             }
             catch (Exception e)
             {
@@ -40,7 +50,7 @@ namespace Elestor.Intake.API.Controllers
                     ReasonPhrase = e.Message
                 };
             }
-            return response;
+            return  usuario;
         }
     }
 }

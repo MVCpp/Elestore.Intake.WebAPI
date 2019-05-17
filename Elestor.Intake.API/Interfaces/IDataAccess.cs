@@ -7,7 +7,7 @@ namespace Elestor.Intake.API.Interfaces
 {
     public interface IDataAccess
     {
-        Task<Usuario> Registro(Usuario usuario);
+        Task<bool> Registro(Usuario usuario);
 
         Task<object> RecuperarCuenta(Usuario usuario);
 

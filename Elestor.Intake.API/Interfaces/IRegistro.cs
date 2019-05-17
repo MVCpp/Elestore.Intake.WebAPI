@@ -6,6 +6,6 @@ namespace Elestor.Intake.API.Interfaces
 {
     public interface IRegistro
     {
-        Task<Usuario> Registro(Usuario usuario);
+        Task<bool> Registro(Usuario usuario);
     }
 }
