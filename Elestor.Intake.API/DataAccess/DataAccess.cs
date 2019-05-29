@@ -51,7 +51,7 @@
                                 cmd.Parameters.Add(new MySqlParameter("thisemail", usuario.email));
                                 cmd.Parameters.Add(new MySqlParameter("thisnumeroTelefonico", usuario.numeroTelefonico));
                                 cmd.Parameters.Add(new MySqlParameter("thisfotografia", usuario.fotografia));
-                                cmd.Parameters.Add(new MySqlParameter("thisestatus", 1));
+                                cmd.Parameters.Add(new MySqlParameter("thisestatus", 0));
                                 cmd.Parameters.Add(new MySqlParameter("thisclientid", guid.ToString()));
 
 
@@ -158,7 +158,7 @@
                                 cmd.Parameters.Add(new MySqlParameter("thishoraapertura", negocio.horaapertura));
                                 cmd.Parameters.Add(new MySqlParameter("thishoracierre", negocio.horacierre));
                                 cmd.Parameters.Add(new MySqlParameter("thiscategoria", negocio.categoria));
-                                cmd.Parameters.Add(new MySqlParameter("thissubcategoria", negocio.FK_subcategoria));
+                                cmd.Parameters.Add(new MySqlParameter("thissubcategoria", negocio.subcategoria));
                                 cmd.Parameters.Add(new MySqlParameter("thisdescripcion", negocio.descripcion));
                                 cmd.Parameters.Add(new MySqlParameter("thislatitud", negocio.latitud));
                                 cmd.Parameters.Add(new MySqlParameter("thislongitud", negocio.longitud));

@@ -19,6 +19,7 @@
             public string horaapertura {get; set;} = string.Empty;
             public string horacierre {get; set;} = string.Empty;
             public string categoria {get; set;} = string.Empty;
+            public string subcategoria { get; set; } = string.Empty;
             public string FK_subcategoria{get; set;} = string.Empty;
             public string descripcion {get; set;} = string.Empty;
             public string latitud { get; set; } = string.Empty;
