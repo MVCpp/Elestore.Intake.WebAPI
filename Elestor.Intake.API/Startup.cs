@@ -52,6 +52,7 @@ namespace Elestor.Intake.API
                         .AllowAnyHeader()
                         .AllowCredentials());
 
+
             app.UseMvc();
         }
     }
