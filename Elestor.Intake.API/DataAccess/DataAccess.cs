@@ -84,6 +84,16 @@
 
                         var result = await conn.QueryAsync<Usuario>("usp_Usuario_Select",new {thispassword = usuario.password, thisemail = usuario.email},null,3000000,CommandType.StoredProcedure);
 
+                        if(result.AsList().Count > 0)
+                        {
+                            string clientid = result.AsList()[0].clientid;
+
+                            IEnumerable<Negocio> negocio = await this.ObtenerNegocio(clientid);
+
+                            result.AsList()[0].negocio = negocio.AsList();
+                        }
+
+                        
                         return result;
 
                     }
