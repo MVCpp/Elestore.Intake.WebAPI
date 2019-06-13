@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Elestor.Intake.API.Models
 {
-    public class Usuario
+    public class UsuarioResponse
     {
-        public Usuario()
+        public UsuarioResponse()
         {
-           
+
         }
         public string clientid { get; set; } = string.Empty;
         public string nombre { get; set; } = string.Empty;
@@ -18,8 +18,8 @@ namespace Elestor.Intake.API.Models
         public string confirmPassword { get; set; } = string.Empty;
         public string email { get; set; } = string.Empty;
         public string numeroTelefonico { get; set; } = string.Empty;
-        public byte[] fotografia { get; set; } = new byte[] { };
-        //public string fotografia { get; set; } = string.Empty;
+        //public byte[] fotografia { get; set; } = new byte[] { };
+        public string fotografia { get; set; } = string.Empty;
 
         public List<Negocio> negocio { get; set; } = new List<Negocio>();
     }

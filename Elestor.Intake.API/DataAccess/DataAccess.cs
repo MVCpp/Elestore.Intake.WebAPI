@@ -29,7 +29,7 @@
             {
                 bool ret = false;
 
-                await Task.Run(() => {
+               
 
                     try
                     {
@@ -55,7 +55,7 @@
                                 cmd.Parameters.Add(new MySqlParameter("thisclientid", guid.ToString()));
 
 
-                               cmd.ExecuteNonQuery();
+                                await cmd.ExecuteNonQueryAsync();
                                 conn.Close();
 
                                 ret = true;
@@ -67,7 +67,7 @@
                     {
                         ret = false;
                     }
-                });
+
                 return ret;
             }
 
@@ -91,6 +91,7 @@
                             IEnumerable<Negocio> negocio = await this.ObtenerNegocio(clientid);
 
                             result.AsList()[0].negocio = negocio.AsList();
+                            
                         }
 
                         
@@ -211,14 +212,16 @@
             }
         }
 
+   
+        
         public async Task<object> Actualizar(Usuario usuario)
         {
             object ret = new object();
 
-            await Task.Run(() => {
-
-                try
+            try
                 {
+               
+
                     using (MySqlConnection conn = new MySqlConnection(Constants.ConnectionString))
                     {
                         using (MySqlCommand cmd = new MySqlCommand("usp_Cuenta_Update", conn))
@@ -237,12 +240,12 @@
                             cmd.Parameters.Add(new MySqlParameter("thisnumeroTelefonico", usuario.numeroTelefonico));
                             cmd.Parameters.Add(new MySqlParameter("thisestatus", 1));
                             cmd.Parameters.Add(new MySqlParameter("thisclientid", usuario.clientid));
-                            cmd.Parameters.Add(new MySqlParameter("thisfotografia",usuario.fotografia));
+                            cmd.Parameters.Add(new MySqlParameter("thisfotografia", usuario.fotografia));
 
-
-                            ret = cmd.ExecuteNonQuery();
+                            ret = await cmd.ExecuteNonQueryAsync();
                             conn.Close();
 
+                            cmd.Dispose();
                         }
                     }
                 }
@@ -250,7 +253,7 @@
                 {
                     ret = ex.Message;
                 }
-            });
+           
             return ret;
         }
 
@@ -333,7 +336,6 @@
                                     , clave = producto.clave
                                     , estatus = producto.estatus
                                     , fotografia = producto.fotografia
-                                    , cantidad = producto.cantidad
                                     , precio = producto.precio
                                     , negocioid = producto.negocioid}
                                     ,null,30000,CommandType.StoredProcedure);

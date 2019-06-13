@@ -42,7 +42,7 @@ namespace Elestor.Intake.API.Controllers
 
                 if(Convert.ToBoolean(response))
                 {
-                    usuario = await _login.Login(userModel);
+                    //usuario = await _login.Login(userModel);
 
                     // call send email api
 
