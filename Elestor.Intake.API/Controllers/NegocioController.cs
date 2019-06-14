@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Elestor.Intake.API.Helpers;
 using Elestor.Intake.API.Interfaces;
 using Elestor.Intake.API.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -47,7 +49,7 @@ namespace Elestor.Intake.API.Controllers
 
             try
             {
-                response = await _negocio.ObtenerNegocio(clientid);
+               response = await _negocio.ObtenerNegocio(clientid);
             }
             catch (Exception e)
             {
@@ -60,8 +62,7 @@ namespace Elestor.Intake.API.Controllers
             }
             return response;
         }
-
-
+      
 
         [HttpPost("catnegocio")]
         public async Task<object> ObtenerCatNegocio([FromBody] int id = 0)
@@ -125,5 +126,6 @@ namespace Elestor.Intake.API.Controllers
             }
             return response;
         }
+
     }
 }

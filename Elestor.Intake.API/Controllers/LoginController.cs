@@ -27,18 +27,11 @@ namespace Elestor.Intake.API.Controllers
         public async Task<object> IniciarSesion([FromBody] Usuario userModel)
         {
             object response = null;
-            UsuarioResponse usuario = null;
 
             try
             {
-                usuario = new UsuarioResponse();
+                response = await _login.Login(userModel);
 
-                var r = await _login.Login(userModel);
-
-                response = r;
-
-                usuario = ToResponse((List<Usuario>)response);
-               
             }
             catch (Exception e)
             {
@@ -49,7 +42,7 @@ namespace Elestor.Intake.API.Controllers
                     ReasonPhrase = e.Message
                 };
             }
-            return usuario;
+            return response;
         }
 
 
@@ -58,25 +51,6 @@ namespace Elestor.Intake.API.Controllers
         public string hola()
         {
             return "hi from aws";
-        }
-
-        
-        internal UsuarioResponse ToResponse(List<Usuario> usuario)
-        {
-            return new UsuarioResponse()
-            {
-                clientid = usuario[0].clientid,
-                nombre = usuario[0].nombre,
-                apellidoMaterno = usuario[0].apellidoMaterno,
-                apellidoPaterno = usuario[0].apellidoPaterno,
-                nombreUsuario = usuario[0].nombreUsuario,
-                password = usuario[0].password,
-                confirmPassword = usuario[0].confirmPassword,
-                email = usuario[0].email,
-                numeroTelefonico = usuario[0].numeroTelefonico,
-                fotografia = usuario[0].fotografia.GetString(),
-                negocio = usuario[0].negocio
-            };
         }
 
     }

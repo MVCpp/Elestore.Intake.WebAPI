@@ -7,29 +7,42 @@
     using Dapper;
     using System.Data.SqlClient;
     using System.Data;
+using Elestor.Intake.API.Helpers;
+using System.Linq;
 
-    namespace Elestor.Intake.API.DataAccess
+namespace Elestor.Intake.API.DataAccess
+{
+    public class DataAccess : IDataAccess
     {
-        public class DataAccess : IDataAccess
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:Elestor.Intake.API.DataAccess.DataAccess"/> class.
+        /// </summary>
+        public DataAccess()
         {
-            public DataAccess()
+
+        }
+        /// <summary>
+        /// Gets the connection.
+        /// </summary>
+        /// <value>The connection.</value>
+        public IDbConnection Connection
+        {
+            get
             {
+            return new MySqlConnection(Constants.ConnectionString);
 
             }
-            public IDbConnection Connection
-            {
-                get
-                {
-                return new MySqlConnection(Constants.ConnectionString);
-
-                }
-            }
-
-            public async Task<bool> Registro(Usuario usuario)
-            {
+        }
+        /// <summary>
+        /// Registro the specified usuario.
+        /// </summary>
+        /// <returns>The registro.</returns>
+        /// <param name="usuario">Usuario.</param>
+        public async Task<bool> Registro(Usuario usuario)
+        {
                 bool ret = false;
 
-               
+                byte[] photo = usuario.fotografia.GetBytes();
 
                     try
                     {
@@ -50,7 +63,7 @@
                                 cmd.Parameters.Add(new MySqlParameter("thispassword", usuario.password));
                                 cmd.Parameters.Add(new MySqlParameter("thisemail", usuario.email));
                                 cmd.Parameters.Add(new MySqlParameter("thisnumeroTelefonico", usuario.numeroTelefonico));
-                                cmd.Parameters.Add(new MySqlParameter("thisfotografia", usuario.fotografia));
+                                cmd.Parameters.Add(new MySqlParameter("thisfotografia", photo));
                                 cmd.Parameters.Add(new MySqlParameter("thisestatus", 0));
                                 cmd.Parameters.Add(new MySqlParameter("thisclientid", guid.ToString()));
 
@@ -69,20 +82,26 @@
                     }
 
                 return ret;
-            }
+        }
+        /// <summary>
+        /// Login the specified usuario.
+        /// </summary>
+        /// <returns>The login.</returns>
+        /// <param name="usuario">Usuario.</param>
+        public async Task<IEnumerable<Usuario>> Login(Usuario usuario)
+        {
+                List<Usuario> userResponse = null;
 
-            public async Task<IEnumerable<Usuario>> Login(Usuario usuario)
-            {
-            
                 try
                 {
-               
                     using (IDbConnection conn = Connection)
                     {
                       
                         conn.Open();
+                        
+                        userResponse = new List<Usuario>();
 
-                        var result = await conn.QueryAsync<Usuario>("usp_Usuario_Select",new {thispassword = usuario.password, thisemail = usuario.email},null,3000000,CommandType.StoredProcedure);
+                        var result = await conn.QueryAsync<UsuarioResponse>("usp_Usuario_Select",new {thispassword = usuario.password, thisemail = usuario.email},null,3000000,CommandType.StoredProcedure);
 
                         if(result.AsList().Count > 0)
                         {
@@ -94,8 +113,9 @@
                             
                         }
 
-                        
-                        return result;
+                        userResponse = ToResponseUser((List<UsuarioResponse>)result);
+
+                        return userResponse;
 
                     }
                 }
@@ -107,8 +127,15 @@
 
             }
 
-            public async Task<object> RecuperarCuenta(Usuario usuario)
-            {
+
+
+        /// <summary>
+        /// Recuperars the cuenta.
+        /// </summary>
+        /// <returns>The cuenta.</returns>
+        /// <param name="usuario">Usuario.</param>
+        public async Task<object> RecuperarCuenta(Usuario usuario)
+        {
                 object ret = new object();
 
                 await Task.Run(() => {
@@ -139,8 +166,12 @@
                 });
                 return ret;
             }
-
-            public async Task<object> AgregarNegocio(Negocio negocio)
+        /// <summary>
+        /// Agregars the negocio.
+        /// </summary>
+        /// <returns>The negocio.</returns>
+        /// <param name="negocio">Negocio.</param>
+        public async Task<object> AgregarNegocio(Negocio negocio)
             {
                 object ret = new object();
 
@@ -148,6 +179,9 @@
 
                     try
                     {
+                        byte[] photo = negocio.fotografia.GetBytes();
+                        byte[] photo2 = negocio.fotografia2.GetBytes();
+
                         using (MySqlConnection conn = new MySqlConnection(Constants.ConnectionString))
                         {
                             using (MySqlCommand cmd = new MySqlCommand("usp_Negocio_Insert", conn))
@@ -174,8 +208,8 @@
                                 cmd.Parameters.Add(new MySqlParameter("thislatitud", negocio.latitud));
                                 cmd.Parameters.Add(new MySqlParameter("thislongitud", negocio.longitud));
                                 cmd.Parameters.Add(new MySqlParameter("thisactive", negocio.active));
-                                cmd.Parameters.Add(new MySqlParameter("thisfotografia", negocio.fotografia));
-                                cmd.Parameters.Add(new MySqlParameter("thisfotografia2", negocio.fotografia2));
+                                cmd.Parameters.Add(new MySqlParameter("thisfotografia", photo));
+                                cmd.Parameters.Add(new MySqlParameter("thisfotografia2", photo2));
 
                                 ret = cmd.ExecuteNonQuery();
                                 conn.Close();
@@ -191,18 +225,27 @@
                 return ret;
             }
 
-
+        /// <summary>
+        /// Obteners the negocio.
+        /// </summary>
+        /// <returns>The negocio.</returns>
+        /// <param name="clientid">Clientid.</param>
         public async Task<IEnumerable<Negocio>> ObtenerNegocio(string clientid)
         {
+            List<Negocio> negocioResponse = null;
             try
             {
                 using (IDbConnection conn = Connection)
                 {
                     conn.Open();
 
-                    var result = await conn.QueryAsync<Negocio>("usp_Negocio_Select", new { thisclientid = clientid }, null, 30000, CommandType.StoredProcedure);
+                    negocioResponse = new List<Negocio>();
 
-                    return result;
+                    var result = await conn.QueryAsync<NegocioResponse>("usp_Negocio_Select", new { thisclientid = clientid }, null, 30000, CommandType.StoredProcedure);
+
+                    negocioResponse = ToResponseNegocio((List<NegocioResponse>)result);
+
+                    return negocioResponse;
                 
                 }
             }
@@ -213,16 +256,20 @@
         }
 
    
-        
+        /// <summary>
+        /// Actualizar the specified usuario.
+        /// </summary>
+        /// <returns>The actualizar.</returns>
+        /// <param name="usuario">Usuario.</param>
         public async Task<object> Actualizar(Usuario usuario)
         {
             object ret = new object();
 
             try
                 {
-               
+                byte[] photo = usuario.fotografia.GetBytes();
 
-                    using (MySqlConnection conn = new MySqlConnection(Constants.ConnectionString))
+                using (MySqlConnection conn = new MySqlConnection(Constants.ConnectionString))
                     {
                         using (MySqlCommand cmd = new MySqlCommand("usp_Cuenta_Update", conn))
                         {
@@ -240,7 +287,7 @@
                             cmd.Parameters.Add(new MySqlParameter("thisnumeroTelefonico", usuario.numeroTelefonico));
                             cmd.Parameters.Add(new MySqlParameter("thisestatus", 1));
                             cmd.Parameters.Add(new MySqlParameter("thisclientid", usuario.clientid));
-                            cmd.Parameters.Add(new MySqlParameter("thisfotografia", usuario.fotografia));
+                            cmd.Parameters.Add(new MySqlParameter("thisfotografia", photo));
 
                             ret = await cmd.ExecuteNonQueryAsync();
                             conn.Close();
@@ -256,7 +303,10 @@
            
             return ret;
         }
-
+        /// <summary>
+        /// Obteners the cat negocio.
+        /// </summary>
+        /// <returns>The cat negocio.</returns>
         public async Task<IEnumerable<CatNegocio>> ObtenerCatNegocio()
         {
             try
@@ -276,7 +326,11 @@
                 return null;
             }
         }
-
+        /// <summary>
+        /// Obteners the sub cat negocio.
+        /// </summary>
+        /// <returns>The sub cat negocio.</returns>
+        /// <param name="id">Identifier.</param>
         public async Task<IEnumerable<SubCatNegocio>> ObtenerSubCatNegocio(int id)
         {
             try
@@ -296,18 +350,27 @@
                 return null;
             }
         }
-
+        /// <summary>
+        /// Obteners the productos.
+        /// </summary>
+        /// <returns>The productos.</returns>
+        /// <param name="negocio">Negocio.</param>
         public async Task<IEnumerable<Producto>> ObtenerProductos(Negocio negocio)
         {
+            List<Producto> productos = null;
             try
             {
                 using (IDbConnection conn = Connection)
                 {
                     conn.Open();
 
-                    var result = await conn.QueryAsync<Producto>("usp_Producto_Select", new { thisnegocioid = negocio.clientid }, null, 30000, CommandType.StoredProcedure);
+                    productos = new List<Producto>();
 
-                    return result;
+                    var result = await conn.QueryAsync<ProductoResponse>("usp_Producto_Select", new { thisnegocioid = negocio.clientid }, null, 30000, CommandType.StoredProcedure);
+
+                    productos = ToResponseProductos((List<ProductoResponse>)result);
+
+                    return productos;
 
                 }
             }
@@ -318,6 +381,11 @@
         }
 
 
+        /// <summary>
+        /// Guardars the producto.
+        /// </summary>
+        /// <returns>The producto.</returns>
+        /// <param name="producto">Producto.</param>
         public async Task<object> GuardarProducto(Producto producto)
         {
             object ret = new object();
@@ -325,17 +393,17 @@
                 try
                 {
                   using(IDbConnection conn = Connection) 
-                  { 
-                           
+                  {
+                    byte[] photo = producto.fotografia.GetBytes();
                             conn.Open();
 
 
-                           var result = conn.ExecuteScalar("usp_Producto_Insert", 
+                           var result = await conn.ExecuteScalarAsync("usp_Producto_Insert", 
                                 new { nombre = producto.nombre
                                     , descripcion = producto.descripcion
                                     , clave = producto.clave
                                     , estatus = producto.estatus
-                                    , fotografia = producto.fotografia
+                                    , fotografia = photo
                                     , precio = producto.precio
                                     , negocioid = producto.negocioid}
                                     ,null,30000,CommandType.StoredProcedure);
@@ -353,13 +421,19 @@
                 }
 
         }
-
+        /// <summary>
+        /// Negocios the editar.
+        /// </summary>
+        /// <returns>The editar.</returns>
+        /// <param name="negocio">Negocio.</param>
         public async Task<object> NegocioEditar(Negocio negocio)
         {
             try
             {
                 using (IDbConnection conn = Connection)
                 {
+                    byte[] photo = negocio.fotografia.GetBytes();
+                    byte[] photo2 = negocio.fotografia2.GetBytes();
                     conn.Open();
 
                     var result = conn.ExecuteScalar("usp_Negocio_Update", 
@@ -379,7 +453,8 @@
                             , thislatitud = negocio.latitud
                             , thislongitud = negocio.longitud
                             , thisactive = negocio.active
-                            , thisfotografia = negocio.fotografia}
+                            , thisfotografia = photo
+                            , thisfotografia2 = photo2}
                             ,null,30000,CommandType.StoredProcedure);
 
                     return  1;
@@ -391,7 +466,11 @@
                 return 0;
             }
         }
-
+        /// <summary>
+        /// Borrars the producto.
+        /// </summary>
+        /// <returns>The producto.</returns>
+        /// <param name="producto">Producto.</param>
         public async Task<IEnumerable<Producto>> BorrarProducto(Producto producto)
         {
             try
@@ -412,6 +491,105 @@
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Tos the response user.
+        /// </summary>
+        /// <returns>The response user.</returns>
+        /// <param name="usuario">Usuario.</param>
+        internal List<Usuario> ToResponseUser(List<UsuarioResponse> usuario)
+        {
+            List<Usuario> lstUsuario = new List<Usuario>();
+            if (usuario.Count > 0)
+            {
+                lstUsuario.Add(new Usuario()
+                {
+                    clientid = usuario[0].clientid,
+                    nombre = usuario[0].nombre,
+                    apellidoMaterno = usuario[0].apellidoMaterno,
+                    apellidoPaterno = usuario[0].apellidoPaterno,
+                    nombreUsuario = usuario[0].nombreUsuario,
+                    password = usuario[0].password,
+                    confirmPassword = usuario[0].confirmPassword,
+                    email = usuario[0].email,
+                    numeroTelefonico = usuario[0].numeroTelefonico,
+                    fotografia = usuario[0].fotografia.GetString(),
+                    negocio = usuario[0].negocio
+                }
+               );
+            }
+
+            return lstUsuario;
+        }
+        /// <summary>
+        /// Tos the response negocio.
+        /// </summary>
+        /// <returns>The response negocio.</returns>
+        /// <param name="negocio">Negocio.</param>
+        internal List<Negocio> ToResponseNegocio(List<NegocioResponse> negocio)
+        {
+            List<Negocio> lstUsuario = new List<Negocio>();
+
+            if (negocio.Count > 0)
+            {
+                lstUsuario.Add(new Negocio()
+                {
+                    clientid = negocio[0].clientid,
+                    negocioid = negocio[0].negocioid,
+                    nombre = negocio[0].nombre,
+                    callenumero = negocio[0].callenumero,
+                    colonia = negocio[0].colonia,
+                    ciudad = negocio[0].ciudad,
+                    estado = negocio[0].estado,
+                    codigopostal = negocio[0].codigopostal,
+                    horaapertura = negocio[0].horaapertura,
+                    horacierre = negocio[0].horacierre,
+                    categoria = negocio[0].categoria,
+                    subcategoria = negocio[0].subcategoria,
+                    FK_subcategoria = negocio[0].FK_subcategoria,
+                    descripcion = negocio[0].descripcion,
+                    latitud = negocio[0].latitud,
+                    longitud = negocio[0].longitud,
+                    active = negocio[0].active,
+                    fotografia = negocio[0].fotografia.GetString(),
+                    fotografia2 = negocio[0].fotografia2.GetString(),
+                });
+            }
+
+            return lstUsuario;
+
+        }
+
+        /// <summary>
+        /// Tos the response productos.
+        /// </summary>
+        /// <returns>The response productos.</returns>
+        /// <param name="productos">Productos.</param>
+        internal List<Producto> ToResponseProductos(List<ProductoResponse> productos)
+        {
+            List<Producto> lstProd = new List<Producto>();
+
+            if (productos.Count > 0)
+            {
+                foreach (var prod in productos)
+                {
+                    lstProd.Add(new Producto()
+                    {
+                        id_producto = prod.id_producto,
+                        nombre = prod.nombre,
+                        descripcion = prod.descripcion,
+                        clave = prod.clave,
+                        estatus = prod.estatus,
+                        fotografia = prod.fotografia.GetString(),
+                        precio = prod.precio,
+                        negocioid = prod.negocioid
+                    });
+                }
+            }
+
+            return lstProd;
+
         }
 
     }
