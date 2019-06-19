@@ -289,7 +289,7 @@ namespace Elestor.Intake.API.DataAccess
                             cmd.Parameters.Add(new MySqlParameter("thisclientid", usuario.clientid));
                             cmd.Parameters.Add(new MySqlParameter("thisfotografia", photo));
 
-                            ret = await cmd.ExecuteNonQueryAsync();
+                            ret = cmd.ExecuteNonQuery();
                             conn.Close();
 
                             cmd.Dispose();
@@ -405,7 +405,8 @@ namespace Elestor.Intake.API.DataAccess
                                     , estatus = producto.estatus
                                     , fotografia = photo
                                     , precio = producto.precio
-                                    , negocioid = producto.negocioid}
+                                    , negocioid = producto.negocioid
+                                    , tiempopreparacion = producto.tiempopreparacion}
                                     ,null,30000,CommandType.StoredProcedure);
                         conn.Close();
 
@@ -493,6 +494,29 @@ namespace Elestor.Intake.API.DataAccess
             }
         }
 
+        public async Task<IEnumerable<CatProducto>> ObtnerCatProductoPorIdCatNegocio(string categoria)
+        {
+            try
+            {
+                using (IDbConnection conn = Connection)
+                {
+                    conn.Open();
+
+                    var result = await conn.QueryAsync<CatProducto>("usp_Producto_Delete",
+                        new
+                        {
+                            categoria = categoria
+                        }, null, 30000, CommandType.StoredProcedure);
+
+                    return result;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
         /// <summary>
         /// Tos the response user.
         /// </summary>
@@ -583,7 +607,8 @@ namespace Elestor.Intake.API.DataAccess
                         estatus = prod.estatus,
                         fotografia = prod.fotografia.GetString(),
                         precio = prod.precio,
-                        negocioid = prod.negocioid
+                        negocioid = prod.negocioid,
+                        tiempopreparacion = prod.tiempopreparacion
                     });
                 }
             }

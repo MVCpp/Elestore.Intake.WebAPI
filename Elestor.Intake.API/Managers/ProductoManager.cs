@@ -64,5 +64,23 @@ namespace Elestor.Intake.API.Managers
 
             return response;
         }
+
+        public async Task<IEnumerable<CatProducto>> ObtnerCatProductoPorIdCatNegocio(string categoria)
+        {
+            IEnumerable<CatProducto> response = null;
+
+            try
+            {
+                response = await _dataAccess.ObtnerCatProductoPorIdCatNegocio(categoria);
+
+            }
+            catch (Exception ex)
+            {
+                response = null;
+            }
+
+            return response;
+        }
+    
     }
 }

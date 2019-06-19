@@ -12,5 +12,7 @@ namespace Elestor.Intake.API.Interfaces
         Task<IEnumerable<Producto>> ObtenerProducto(Negocio negocio);
 
         Task<IEnumerable<Producto>> BorrarProducto(Producto negocio);
+
+        Task<IEnumerable<CatProducto>> ObtnerCatProductoPorIdCatNegocio(string categoria);
     }
 }
