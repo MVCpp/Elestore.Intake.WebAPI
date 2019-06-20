@@ -502,7 +502,7 @@ namespace Elestor.Intake.API.DataAccess
                 {
                     conn.Open();
 
-                    var result = await conn.QueryAsync<CatProducto>("usp_Producto_Delete",
+                    var result = await conn.QueryAsync<CatProducto>("usp_CatProducto_Select",
                         new
                         {
                             categoria = categoria

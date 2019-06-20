@@ -16,6 +16,6 @@ namespace Elestor.Intake.API.Models
         //public string fotografia { get; set; } = string.Empty;
         public double precio { get; set; } = 0.0;
         public string negocioid { get; set; } = String.Empty;
-        public double tiempopreparacion { get; set; } = 0.0;
+        public double? tiempopreparacion { get; set; } = 0.0;
     }
 }
