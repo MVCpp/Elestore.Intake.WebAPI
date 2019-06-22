@@ -24,6 +24,11 @@ namespace Elestor.Intake.API.Controllers
         [HttpPost("obtener")]
         public async Task<object> ObtenerProducto([FromBody]Negocio negocio)
         {
+            if (negocio == null)
+            {
+                throw new ArgumentNullException(nameof(negocio), "Cannot be null.");
+            }
+
             object response = null;
 
             try
@@ -48,9 +53,40 @@ namespace Elestor.Intake.API.Controllers
         {
             object response = null;
 
+            if (producto == null)
+            {
+                throw new ArgumentNullException(nameof(producto), "Cannot be null.");
+            }
+
             try
             {
                 response = await _producto.GuardarProducto(producto);
+            }
+            catch (Exception e)
+            {
+
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent(e.Message),
+                    ReasonPhrase = e.Message
+                };
+            }
+            return response;
+        }
+
+        [HttpPost("editar")]
+        public async Task<object> EditarProductos([FromBody]Producto producto)
+        {
+            object response = null;
+
+            if (producto == null)
+            {
+                throw new ArgumentNullException(nameof(producto), "Cannot be null.");
+            }
+
+            try
+            {
+                response = await _producto.EditarProducto(producto);
             }
             catch (Exception e)
             {
@@ -68,6 +104,11 @@ namespace Elestor.Intake.API.Controllers
         public async Task<object> BorrarProductos([FromBody]Producto producto)
         {
             IEnumerable<Producto> response = null;
+
+            if (producto == null)
+            {
+                throw new ArgumentNullException(nameof(producto), "Cannot be null.");
+            }
 
             try
             {
@@ -90,6 +131,11 @@ namespace Elestor.Intake.API.Controllers
         public async Task<object> ObtnerCatProductoPorIdCatNegocio([FromBody]string categoria)
         {
             IEnumerable<CatProducto> response = null;
+
+            if (string.IsNullOrEmpty(categoria))
+            {
+                throw new ArgumentNullException(nameof(categoria), "Cannot be null.");
+            }
 
             try
             {

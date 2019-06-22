@@ -406,7 +406,10 @@ namespace Elestor.Intake.API.DataAccess
                                     , fotografia = photo
                                     , precio = producto.precio
                                     , negocioid = producto.negocioid
-                                    , tiempopreparacion = producto.tiempopreparacion}
+                                    , tiempopreparacion = producto.tiempopreparacion
+                                    , otracategoria = producto.otracategoria
+                                    , id_catProducto = producto.id_catProducto
+                                    , complemento = producto.complemento}
                                     ,null,30000,CommandType.StoredProcedure);
                         conn.Close();
 
@@ -420,6 +423,56 @@ namespace Elestor.Intake.API.DataAccess
                 {
                     return null;
                 }
+
+        }
+
+
+        /// <summary>
+        /// Guardars the producto.
+        /// </summary>
+        /// <returns>The producto.</returns>
+        /// <param name="producto">Producto.</param>
+        public async Task<object> EditarProducto(Producto producto)
+        {
+            object ret = new object();
+
+            try
+            {
+                using (IDbConnection conn = Connection)
+                {
+                    byte[] photo = producto.fotografia.GetBytes();
+                    conn.Open();
+
+
+                    var result = await conn.ExecuteScalarAsync("usp_Producto_Update",
+                         new
+                         {
+                             nombre = producto.nombre
+                             ,idproducto = producto.id_producto
+                             ,descripcion = producto.descripcion
+                             ,clave = producto.clave
+                             ,estatus = producto.estatus
+                             ,fotografia = photo
+                             ,precio = producto.precio
+                             ,negocioid = producto.negocioid
+                             ,tiempopreparacion = producto.tiempopreparacion
+                             ,otracategoria = producto.otracategoria
+                             ,id_catProducto = producto.id_catProducto
+                             ,complemento = producto.complemento
+                         }
+                             , null, 30000, CommandType.StoredProcedure);
+                    conn.Close();
+
+                    return 1;
+
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
 
         }
         /// <summary>
@@ -608,7 +661,10 @@ namespace Elestor.Intake.API.DataAccess
                         fotografia = prod.fotografia.GetString(),
                         precio = prod.precio,
                         negocioid = prod.negocioid,
-                        tiempopreparacion = prod.tiempopreparacion
+                        tiempopreparacion = prod.tiempopreparacion,
+                        otracategoria = prod.otracategoria,
+                        complemento = prod.complemento,
+                        id_catProducto = prod.id_catProducto
                     });
                 }
             }

@@ -29,6 +29,8 @@ namespace Elestor.Intake.API.Interfaces
 
         Task<object> GuardarProducto(Producto producto);
 
+        Task<object> EditarProducto(Producto producto);
+
         Task<IEnumerable<Producto>> BorrarProducto(Producto negocio);
 
         Task<IEnumerable<CatProducto>> ObtnerCatProductoPorIdCatNegocio(string categoria);

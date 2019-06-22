@@ -31,6 +31,22 @@ namespace Elestor.Intake.API.Managers
             return response;
         }
 
+        public async Task<object> EditarProducto(Producto producto)
+        {
+            object response = null;
+            try
+            {
+                response = await _dataAccess.EditarProducto(producto);
+
+            }
+            catch (Exception ex)
+            {
+                response = ex;
+            }
+
+            return response;
+        }
+
         public async Task<IEnumerable<Producto>> ObtenerProducto(Negocio negocio)
         {
             IEnumerable<Producto> response = null;
