@@ -46,6 +46,21 @@ namespace Elestor.Intake.API.Managers
 
             return response;
         }
+        public async Task<IEnumerable<Negocio>> ObtenerNegocios()
+        {
+            IEnumerable<Negocio> response = null;
+
+            try
+            {
+                response = await _dataAccess.ObtenerNegocios();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+            return response;
+        }
 
         public async Task<IEnumerable<CatNegocio>> ObtenerCatNegocio()
         {

@@ -17,6 +17,8 @@ namespace Elestor.Intake.API.Interfaces
 
         Task<IEnumerable<Negocio>> ObtenerNegocio(string clientid);
 
+        Task<IEnumerable<Negocio>> ObtenerNegocios();
+
         Task<object> Actualizar(Usuario usuario);
 
         Task<IEnumerable<CatNegocio>> ObtenerCatNegocio();

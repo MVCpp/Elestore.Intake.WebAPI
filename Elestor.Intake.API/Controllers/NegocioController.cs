@@ -62,7 +62,28 @@ namespace Elestor.Intake.API.Controllers
             }
             return response;
         }
-      
+
+        [HttpPost("obtenerall")]
+        public async Task<object> ObtenerNegocios()
+        {
+            object response = null;
+
+            try
+            {
+                response = await _negocio.ObtenerNegocios();
+            }
+            catch (Exception e)
+            {
+
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent(e.Message),
+                    ReasonPhrase = e.Message
+                };
+            }
+            return response;
+        }
+
 
         [HttpPost("catnegocio")]
         public async Task<object> ObtenerCatNegocio([FromBody] int id = 0)

@@ -1,12 +1,12 @@
-﻿    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Elestor.Intake.API.Interfaces;
-    using Elestor.Intake.API.Models;
-    using MySql.Data.MySqlClient;
-    using Dapper;
-    using System.Data.SqlClient;
-    using System.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Elestor.Intake.API.Interfaces;
+using Elestor.Intake.API.Models;
+using MySql.Data.MySqlClient;
+using Dapper;
+using System.Data.SqlClient;
+using System.Data;
 using Elestor.Intake.API.Helpers;
 using System.Linq;
 
@@ -255,7 +255,37 @@ namespace Elestor.Intake.API.DataAccess
             }
         }
 
-   
+
+        /// <summary>
+        /// Obteners the negocio.
+        /// </summary>
+        /// <returns>The negocio.</returns>
+        /// <param name="clientid">Clientid.</param>
+        public async Task<IEnumerable<Negocio>> ObtenerNegocios()
+        {
+            List<Negocio> negocioResponse = null;
+            try
+            {
+                using (IDbConnection conn = Connection)
+                {
+                    conn.Open();
+
+                    negocioResponse = new List<Negocio>();
+
+                    var result = await conn.QueryAsync<NegocioResponse>("usp_NegociosAll_Select", null, null, 30000, CommandType.StoredProcedure);
+
+                    negocioResponse = ToResponseNegocio((List<NegocioResponse>)result);
+
+                    return negocioResponse;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         /// <summary>
         /// Actualizar the specified usuario.
         /// </summary>
@@ -527,17 +557,24 @@ namespace Elestor.Intake.API.DataAccess
         /// <param name="producto">Producto.</param>
         public async Task<IEnumerable<Producto>> BorrarProducto(Producto producto)
         {
+
+            List<Producto> productos = null;
+
             try
             {
                 using (IDbConnection conn = Connection)
                 {
                     conn.Open();
 
-                    var result = await conn.QueryAsync<Producto>("usp_Producto_Delete", 
+                    productos = new List<Producto>();
+
+                    var result = await conn.QueryAsync<ProductoResponse>("usp_Producto_Delete", 
                         new { thisnegocioid = producto.negocioid, 
                         thisproductoid = producto.id_producto}, null, 30000, CommandType.StoredProcedure);
 
-                    return result;
+                    productos = ToResponseProductos((List<ProductoResponse>)result);
+
+                    return productos;
 
                 }
             }
