@@ -28,6 +28,11 @@ namespace Elestor.Intake.API.Controllers
         {
             object response = null;
 
+            if (userModel == null)
+            {
+                throw new ArgumentNullException(nameof(userModel), "Cannot be null.");
+            }
+
             try
             {
                 response = await _login.Login(userModel);

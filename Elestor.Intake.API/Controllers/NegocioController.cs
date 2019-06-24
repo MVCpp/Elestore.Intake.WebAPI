@@ -26,6 +26,11 @@ namespace Elestor.Intake.API.Controllers
         {
             object response = null;
 
+            if (negocio == null)
+            {
+                throw new ArgumentNullException(nameof(negocio), "Cannot be null.");
+            }
+
             try
             {
                 response = await _negocio.AgregarNegocio(negocio);
@@ -46,6 +51,11 @@ namespace Elestor.Intake.API.Controllers
         public async Task<object> ObtenerNegocio([FromBody] string clientid)
         {
             object response = null;
+
+            if (string.IsNullOrEmpty(clientid))
+            {
+                throw new ArgumentNullException(nameof(clientid), "Cannot be null.");
+            }
 
             try
             {
@@ -90,6 +100,7 @@ namespace Elestor.Intake.API.Controllers
         {
             object response = null;
 
+
             try
             {
                 response = await _negocio.ObtenerCatNegocio();
@@ -131,6 +142,11 @@ namespace Elestor.Intake.API.Controllers
         public async Task<object> NegocioEditar([FromBody] Negocio negocio)
         {
             object response = null;
+
+            if (negocio == null)
+            {
+                throw new ArgumentNullException(nameof(negocio), "Cannot be null.");
+            }
 
             try
             {

@@ -42,7 +42,13 @@ namespace Elestor.Intake.API.DataAccess
         {
                 bool ret = false;
 
-                byte[] photo = usuario.fotografia.GetBytes();
+                byte[] photo = { };
+
+                if (usuario.fotografia != null)
+                {
+
+                    photo = usuario.fotografia.GetBytes();
+                }
 
                     try
                     {
@@ -110,7 +116,18 @@ namespace Elestor.Intake.API.DataAccess
                             IEnumerable<Negocio> negocio = await this.ObtenerNegocio(clientid);
 
                             result.AsList()[0].negocio = negocio.AsList();
+
+                            //IEnumerable<Producto> productos = await this.ObtenerProductos(negocio.ToList()[0]);
+
+                            //if(productos.Any())
+                            //{
+                            //    result.AsList()[0].negocio[0].productos = productos.ToList();
+                            //}
                             
+                        }
+                        else
+                        {
+                            result.AsList()[0].negocio = new List<Negocio>();
                         }
 
                         userResponse = ToResponseUser((List<UsuarioResponse>)result);
@@ -294,10 +311,15 @@ namespace Elestor.Intake.API.DataAccess
         public async Task<object> Actualizar(Usuario usuario)
         {
             object ret = new object();
+            byte[] photo = { };
 
             try
                 {
-                byte[] photo = usuario.fotografia.GetBytes();
+                if(usuario.fotografia != null || !string.IsNullOrEmpty(usuario.fotografia))
+                {
+                    photo = usuario.fotografia.GetBytes();
+                }
+               
 
                 using (MySqlConnection conn = new MySqlConnection(Constants.ConnectionString))
                     {
@@ -419,12 +441,17 @@ namespace Elestor.Intake.API.DataAccess
         public async Task<object> GuardarProducto(Producto producto)
         {
             object ret = new object();
+            byte[] photo = { };
 
                 try
                 {
                   using(IDbConnection conn = Connection) 
                   {
-                    byte[] photo = producto.fotografia.GetBytes();
+                    if (producto.fotografia != null || !string.IsNullOrEmpty(producto.fotografia))
+                    {
+                        photo = producto.fotografia.GetBytes();
+                    }
+
                             conn.Open();
 
 
@@ -465,12 +492,17 @@ namespace Elestor.Intake.API.DataAccess
         public async Task<object> EditarProducto(Producto producto)
         {
             object ret = new object();
+            byte[] photo = { };
 
             try
             {
                 using (IDbConnection conn = Connection)
                 {
-                    byte[] photo = producto.fotografia.GetBytes();
+                    if(producto.fotografia != null || !string.IsNullOrEmpty(producto.fotografia))
+                    {
+                        photo = producto.fotografia.GetBytes();
+                    }
+                    
                     conn.Open();
 
 
@@ -512,12 +544,21 @@ namespace Elestor.Intake.API.DataAccess
         /// <param name="negocio">Negocio.</param>
         public async Task<object> NegocioEditar(Negocio negocio)
         {
+            byte[] photo = { },  photo2  = { };
             try
             {
                 using (IDbConnection conn = Connection)
                 {
-                    byte[] photo = negocio.fotografia.GetBytes();
-                    byte[] photo2 = negocio.fotografia2.GetBytes();
+                    if(negocio.fotografia != null || !string.IsNullOrEmpty(negocio.fotografia))
+                    {
+                        photo = negocio.fotografia.GetBytes();
+                    }
+                    if (negocio.fotografia2 != null || !string.IsNullOrEmpty(negocio.fotografia2))
+                    {
+                        photo2 = negocio.fotografia2.GetBytes();
+                    }
+                    
+                  
                     conn.Open();
 
                     var result = conn.ExecuteScalar("usp_Negocio_Update", 
@@ -532,7 +573,7 @@ namespace Elestor.Intake.API.DataAccess
                             , thishoraapertura = negocio.horaapertura
                             , thishoracierre = negocio.horacierre
                             , thiscategoria = negocio.categoria
-                            , thissubcategoria = negocio.FK_subcategoria
+                            , thissubcategoria = negocio.subcategoria
                             , thisdescripcion = negocio.descripcion
                             , thislatitud = negocio.latitud
                             , thislongitud = negocio.longitud
@@ -636,44 +677,6 @@ namespace Elestor.Intake.API.DataAccess
 
             return lstUsuario;
         }
-        /// <summary>
-        /// Tos the response negocio.
-        /// </summary>
-        /// <returns>The response negocio.</returns>
-        /// <param name="negocio">Negocio.</param>
-        internal List<Negocio> ToResponseNegocio(List<NegocioResponse> negocio)
-        {
-            List<Negocio> lstUsuario = new List<Negocio>();
-
-            if (negocio.Count > 0)
-            {
-                lstUsuario.Add(new Negocio()
-                {
-                    clientid = negocio[0].clientid,
-                    negocioid = negocio[0].negocioid,
-                    nombre = negocio[0].nombre,
-                    callenumero = negocio[0].callenumero,
-                    colonia = negocio[0].colonia,
-                    ciudad = negocio[0].ciudad,
-                    estado = negocio[0].estado,
-                    codigopostal = negocio[0].codigopostal,
-                    horaapertura = negocio[0].horaapertura,
-                    horacierre = negocio[0].horacierre,
-                    categoria = negocio[0].categoria,
-                    subcategoria = negocio[0].subcategoria,
-                    FK_subcategoria = negocio[0].FK_subcategoria,
-                    descripcion = negocio[0].descripcion,
-                    latitud = negocio[0].latitud,
-                    longitud = negocio[0].longitud,
-                    active = negocio[0].active,
-                    fotografia = negocio[0].fotografia.GetString(),
-                    fotografia2 = negocio[0].fotografia2.GetString(),
-                });
-            }
-
-            return lstUsuario;
-
-        }
 
         /// <summary>
         /// Tos the response productos.
@@ -709,6 +712,45 @@ namespace Elestor.Intake.API.DataAccess
             return lstProd;
 
         }
+
+        internal List<Negocio> ToResponseNegocio(List<NegocioResponse> negocio)
+        {
+            List<Negocio> lstUsuario = new List<Negocio>();
+
+            if (negocio.Count > 0)
+            {
+                foreach (var item in negocio)
+                {
+                    lstUsuario.Add(new Negocio()
+                    {
+                        clientid = item.clientid,
+                        negocioid = item.negocioid,
+                        nombre = item.nombre,
+                        callenumero = item.callenumero,
+                        colonia = item.colonia,
+                        ciudad = item.ciudad,
+                        estado = item.estado,
+                        codigopostal = item.codigopostal,
+                        horaapertura = item.horaapertura,
+                        horacierre = item.horacierre,
+                        categoria = item.categoria,
+                        subcategoria = item.subcategoria,
+                        FK_subcategoria = item.FK_subcategoria,
+                        descripcion = item.descripcion,
+                        latitud = item.latitud,
+                        longitud = item.longitud,
+                        active = item.active,
+                        fotografia = item.fotografia.GetString(),
+                        fotografia2 = item.fotografia2.GetString()
+                    });
+                }
+
+            }
+
+            return lstUsuario;
+
+        }
+
 
     }
 }

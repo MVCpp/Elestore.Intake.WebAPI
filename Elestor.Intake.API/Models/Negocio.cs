@@ -1,5 +1,7 @@
 ﻿    using System;
-    namespace Elestor.Intake.API.Models
+using System.Collections.Generic;
+
+namespace Elestor.Intake.API.Models
     {
         public class Negocio
         {
@@ -29,6 +31,8 @@
             //public byte[] fotografia2 { get; set; } = new byte[] { };
             public string fotografia { get; set; } = string.Empty;
             public string fotografia2 { get; set; } = string.Empty;
+
+            public List<Producto> productos { get; set; } = new List<Producto>();
 
         }
     }

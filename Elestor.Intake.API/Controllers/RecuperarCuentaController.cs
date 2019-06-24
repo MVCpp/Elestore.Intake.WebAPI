@@ -22,6 +22,11 @@ namespace Elestor.Intake.API.Controllers
         [HttpPost("recuperar")]
         public async Task<object> Recuperar([FromBody] Usuario userModel)
         {
+            if (userModel == null)
+            {
+                throw new ArgumentNullException(nameof(userModel), "Cannot be null.");
+            }
+
             object response = null;
             try
             {
@@ -43,6 +48,12 @@ namespace Elestor.Intake.API.Controllers
         public async Task<object> Actualizar([FromBody] Usuario userModel)
         {
             object response = null;
+
+            if (userModel == null)
+            {
+                throw new ArgumentNullException(nameof(userModel), "Cannot be null.");
+            }
+
             try
             {
                 response = await _recuperarCuenta.Actualizar(userModel);

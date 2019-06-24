@@ -32,9 +32,14 @@ namespace Elestor.Intake.API.Controllers
         [HttpPost("usuario")]
         public  async Task<object> Registro([FromBody] Usuario userModel)
         {
-
             object response = null;
             IEnumerable<Usuario> usuario = null;
+
+            if (userModel == null)
+            {
+                throw new ArgumentNullException(nameof(userModel), "Cannot be null.");
+            }
+
 
             try
             {
@@ -64,7 +69,13 @@ namespace Elestor.Intake.API.Controllers
         internal async Task<object> EnviarCorreo(string email)
         {
             object ret = null;
-            try 
+
+            if (string.IsNullOrEmpty(email))
+            {
+                throw new ArgumentNullException(nameof(email), "Cannot be null.");
+            }
+
+            try
             {
                 HttpResponseMessage response = await
 
