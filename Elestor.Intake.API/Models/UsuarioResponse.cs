@@ -18,8 +18,8 @@ namespace Elestor.Intake.API.Models
         public string confirmPassword { get; set; } = string.Empty;
         public string email { get; set; } = string.Empty;
         public string numeroTelefonico { get; set; } = string.Empty;
-        //public byte[] fotografia { get; set; } = new byte[] { };
-        public string fotografia { get; set; } = string.Empty;
+        public byte[] fotografia { get; set; } = new byte[] { };
+        //public string fotografia { get; set; } = string.Empty;
 
         public List<Negocio> negocio { get; set; } = new List<Negocio>();
     }

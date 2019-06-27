@@ -6,22 +6,36 @@ namespace Elestor.Intake.API.Helpers
     public static class StringToBase64
     {
      
-        public static string Encode(this string str)
+        public static byte[] GetBytes(this string str)
         {
-            //return System.Convert.FromBase64String(str);
+            try
+            {
+                return System.Convert.FromBase64String(str);
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
+            
             //return Encoding.UTF8.GetBytes(str);
-            return System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(str));
-
+       
         }
         
         //System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(base64EncodedData));
 
-        public static string Decode(this string str)
+        public static string GetString(this byte[] bytes)
         {
-            //return System.Convert.ToBase64String(bytes);
+            try
+            {
+                return System.Convert.ToBase64String(bytes);
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
+            
             //return Encoding.UTF8.GetString(bytes, 0, bytes.Length);
-
-            return System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(str));
+          
         }
         
          //System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(plainTextBytes));
