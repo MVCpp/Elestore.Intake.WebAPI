@@ -47,7 +47,7 @@ namespace Elestor.Intake.API.DataAccess
                 if (usuario.fotografia != null)
                 {
 
-                    photo = usuario.fotografia.GetBytes();
+                    //photo = usuario.fotografia.GetBytes();
                 }
 
                     try
@@ -69,7 +69,7 @@ namespace Elestor.Intake.API.DataAccess
                                 cmd.Parameters.Add(new MySqlParameter("thispassword", usuario.password));
                                 cmd.Parameters.Add(new MySqlParameter("thisemail", usuario.email));
                                 cmd.Parameters.Add(new MySqlParameter("thisnumeroTelefonico", usuario.numeroTelefonico));
-                                cmd.Parameters.Add(new MySqlParameter("thisfotografia", photo));
+                                cmd.Parameters.Add(new MySqlParameter("thisfotografia", usuario.fotografia));
                                 cmd.Parameters.Add(new MySqlParameter("thisestatus", 0));
                                 cmd.Parameters.Add(new MySqlParameter("thisclientid", guid.ToString()));
 
@@ -196,8 +196,8 @@ namespace Elestor.Intake.API.DataAccess
 
                     try
                     {
-                        byte[] photo = negocio.fotografia.GetBytes();
-                        byte[] photo2 = negocio.fotografia2.GetBytes();
+                        //byte[] photo = negocio.fotografia.GetBytes();
+                        //byte[] photo2 = negocio.fotografia2.GetBytes();
 
                         using (MySqlConnection conn = new MySqlConnection(Constants.ConnectionString))
                         {
@@ -225,8 +225,8 @@ namespace Elestor.Intake.API.DataAccess
                                 cmd.Parameters.Add(new MySqlParameter("thislatitud", negocio.latitud));
                                 cmd.Parameters.Add(new MySqlParameter("thislongitud", negocio.longitud));
                                 cmd.Parameters.Add(new MySqlParameter("thisactive", negocio.active));
-                                cmd.Parameters.Add(new MySqlParameter("thisfotografia", photo));
-                                cmd.Parameters.Add(new MySqlParameter("thisfotografia2", photo2));
+                                cmd.Parameters.Add(new MySqlParameter("thisfotografia", negocio.fotografia));
+                                cmd.Parameters.Add(new MySqlParameter("thisfotografia2", negocio.fotografia2));
 
                                 ret = cmd.ExecuteNonQuery();
                                 conn.Close();
@@ -317,7 +317,7 @@ namespace Elestor.Intake.API.DataAccess
                 {
                 if(usuario.fotografia != null || !string.IsNullOrEmpty(usuario.fotografia))
                 {
-                    photo = usuario.fotografia.GetBytes();
+                    //photo = usuario.fotografia.GetBytes();
                 }
                
 
@@ -339,7 +339,7 @@ namespace Elestor.Intake.API.DataAccess
                             cmd.Parameters.Add(new MySqlParameter("thisnumeroTelefonico", usuario.numeroTelefonico));
                             cmd.Parameters.Add(new MySqlParameter("thisestatus", 1));
                             cmd.Parameters.Add(new MySqlParameter("thisclientid", usuario.clientid));
-                            cmd.Parameters.Add(new MySqlParameter("thisfotografia", photo));
+                            cmd.Parameters.Add(new MySqlParameter("thisfotografia", usuario.fotografia));
 
                             ret = cmd.ExecuteNonQuery();
                             conn.Close();
@@ -449,7 +449,7 @@ namespace Elestor.Intake.API.DataAccess
                   {
                     if (producto.fotografia != null || !string.IsNullOrEmpty(producto.fotografia))
                     {
-                        photo = producto.fotografia.GetBytes();
+                        //photo = producto.fotografia.GetBytes();
                     }
 
                             conn.Open();
@@ -460,7 +460,7 @@ namespace Elestor.Intake.API.DataAccess
                                     , descripcion = producto.descripcion
                                     , clave = producto.clave
                                     , estatus = producto.estatus
-                                    , fotografia = photo
+                                    , fotografia = producto.fotografia
                                     , precio = producto.precio
                                     , negocioid = producto.negocioid
                                     , tiempopreparacion = producto.tiempopreparacion
@@ -500,7 +500,7 @@ namespace Elestor.Intake.API.DataAccess
                 {
                     if(producto.fotografia != null || !string.IsNullOrEmpty(producto.fotografia))
                     {
-                        photo = producto.fotografia.GetBytes();
+                        //photo = producto.fotografia.GetBytes();
                     }
                     
                     conn.Open();
@@ -514,7 +514,7 @@ namespace Elestor.Intake.API.DataAccess
                              ,descripcion = producto.descripcion
                              ,clave = producto.clave
                              ,estatus = producto.estatus
-                             ,fotografia = photo
+                             ,fotografia = producto.fotografia
                              ,precio = producto.precio
                              ,negocioid = producto.negocioid
                              ,tiempopreparacion = producto.tiempopreparacion
@@ -549,14 +549,14 @@ namespace Elestor.Intake.API.DataAccess
             {
                 using (IDbConnection conn = Connection)
                 {
-                    if(negocio.fotografia != null || !string.IsNullOrEmpty(negocio.fotografia))
-                    {
-                        photo = negocio.fotografia.GetBytes();
-                    }
-                    if (negocio.fotografia2 != null || !string.IsNullOrEmpty(negocio.fotografia2))
-                    {
-                        photo2 = negocio.fotografia2.GetBytes();
-                    }
+                    //if(negocio.fotografia != null || !string.IsNullOrEmpty(negocio.fotografia))
+                    //{
+                    //    photo = negocio.fotografia.GetBytes();
+                    //}
+                    //if (negocio.fotografia2 != null || !string.IsNullOrEmpty(negocio.fotografia2))
+                    //{
+                    //    photo2 = negocio.fotografia2.GetBytes();
+                    //}
                     
                   
                     conn.Open();
@@ -578,8 +578,8 @@ namespace Elestor.Intake.API.DataAccess
                             , thislatitud = negocio.latitud
                             , thislongitud = negocio.longitud
                             , thisactive = negocio.active
-                            , thisfotografia = photo
-                            , thisfotografia2 = photo2}
+                            , thisfotografia = negocio.fotografia
+                            , thisfotografia2 = negocio.fotografia2}
                             ,null,30000,CommandType.StoredProcedure);
 
                     return  1;
@@ -669,7 +669,7 @@ namespace Elestor.Intake.API.DataAccess
                     confirmPassword = usuario[0].confirmPassword,
                     email = usuario[0].email,
                     numeroTelefonico = usuario[0].numeroTelefonico,
-                    fotografia = usuario[0].fotografia.GetString(),
+                    fotografia = usuario[0].fotografia,
                     negocio = usuario[0].negocio
                 }
                );
@@ -698,7 +698,7 @@ namespace Elestor.Intake.API.DataAccess
                         descripcion = prod.descripcion,
                         clave = prod.clave,
                         estatus = prod.estatus,
-                        fotografia = prod.fotografia.GetString(),
+                        fotografia = prod.fotografia,
                         precio = prod.precio,
                         negocioid = prod.negocioid,
                         tiempopreparacion = prod.tiempopreparacion,
@@ -740,8 +740,8 @@ namespace Elestor.Intake.API.DataAccess
                         latitud = item.latitud,
                         longitud = item.longitud,
                         active = item.active,
-                        fotografia = item.fotografia.GetString(),
-                        fotografia2 = item.fotografia2.GetString()
+                        fotografia = item.fotografia,
+                        fotografia2 = item.fotografia2
                     });
                 }
 
