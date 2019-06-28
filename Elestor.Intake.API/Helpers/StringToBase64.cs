@@ -8,9 +8,13 @@ namespace Elestor.Intake.API.Helpers
      
         public static byte[] GetBytes(this string str)
         {
+
+            string b64 = string.Empty;
+            b64 = str.Encode();
+
             try
             {
-                return System.Convert.FromBase64String(str);
+                return System.Convert.FromBase64String(b64);
             }
             catch(Exception ex)
             {
@@ -33,11 +37,18 @@ namespace Elestor.Intake.API.Helpers
             {
                 return null;
             }
-            
-            //return Encoding.UTF8.GetString(bytes, 0, bytes.Length);
           
         }
-        
-         //System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(plainTextBytes));
+
+        public static string Encode(this string plainTextBytes)
+        {
+            return System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(plainTextBytes));
+        }
+
+        public  static string Decode(this string base64EncodedData)
+        {
+            return System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(base64EncodedData));
+        }
+
     }
 }

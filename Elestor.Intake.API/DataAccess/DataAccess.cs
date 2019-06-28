@@ -669,7 +669,7 @@ namespace Elestor.Intake.API.DataAccess
                     confirmPassword = usuario[0].confirmPassword,
                     email = usuario[0].email,
                     numeroTelefonico = usuario[0].numeroTelefonico,
-                    fotografia = usuario[0].fotografia.GetString(),
+                    fotografia = usuario[0].fotografia.GetString().Decode(),
                     negocio = usuario[0].negocio
                 }
                );
@@ -698,7 +698,7 @@ namespace Elestor.Intake.API.DataAccess
                         descripcion = prod.descripcion,
                         clave = prod.clave,
                         estatus = prod.estatus,
-                        fotografia = prod.fotografia.GetString(),
+                        fotografia = prod.fotografia.GetString().Decode(),
                         precio = prod.precio,
                         negocioid = prod.negocioid,
                         tiempopreparacion = prod.tiempopreparacion,
@@ -740,8 +740,8 @@ namespace Elestor.Intake.API.DataAccess
                         latitud = item.latitud,
                         longitud = item.longitud,
                         active = item.active,
-                        fotografia = item.fotografia.GetString(),
-                        fotografia2 = item.fotografia2.GetString()
+                        fotografia = item.fotografia.GetString().Decode(),
+                        fotografia2 = item.fotografia2.GetString().Decode()
                     });
                 }
 
