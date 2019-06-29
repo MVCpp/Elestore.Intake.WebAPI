@@ -28,7 +28,7 @@ namespace Elestor.Intake.API.Controllers
         {
             object response = null;
 
-            if (userModel == null)
+                if (userModel == null)
             {
                 throw new ArgumentNullException(nameof(userModel), "Cannot be null.");
             }

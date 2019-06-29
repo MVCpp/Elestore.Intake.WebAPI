@@ -51,7 +51,11 @@ namespace Elestor.Intake.API.Controllers
 
             if (userModel == null)
             {
-                throw new ArgumentNullException(nameof(userModel), "Cannot be null.");
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent(nameof(userModel) + "Cannot be null."),
+                    ReasonPhrase = "Actualizar"
+                };
             }
 
             try

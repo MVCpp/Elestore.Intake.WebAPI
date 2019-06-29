@@ -47,7 +47,7 @@ namespace Elestor.Intake.API.DataAccess
                 if (usuario.fotografia != null)
                 {
 
-                    photo = usuario.fotografia.GetBytes();
+                    photo = usuario.fotografia.Encode().GetBytes();
                 }
 
                     try
@@ -196,8 +196,8 @@ namespace Elestor.Intake.API.DataAccess
 
                     try
                     {
-                        byte[] photo = negocio.fotografia.GetBytes();
-                        byte[] photo2 = negocio.fotografia2.GetBytes();
+                        byte[] photo = negocio.fotografia.Encode().GetBytes();
+                        byte[] photo2 = negocio.fotografia2.Encode().GetBytes();
 
                         using (MySqlConnection conn = new MySqlConnection(Constants.ConnectionString))
                         {
@@ -317,7 +317,7 @@ namespace Elestor.Intake.API.DataAccess
                 {
                 if(usuario.fotografia != null || !string.IsNullOrEmpty(usuario.fotografia))
                 {
-                    photo = usuario.fotografia.GetBytes();
+                    photo = usuario.fotografia.Encode().GetBytes();
                 }
                
 
@@ -449,7 +449,7 @@ namespace Elestor.Intake.API.DataAccess
                   {
                     if (producto.fotografia != null || !string.IsNullOrEmpty(producto.fotografia))
                     {
-                        photo = producto.fotografia.GetBytes();
+                        photo = producto.fotografia.Encode().GetBytes();
                     }
 
                             conn.Open();
@@ -500,7 +500,7 @@ namespace Elestor.Intake.API.DataAccess
                 {
                     if(producto.fotografia != null || !string.IsNullOrEmpty(producto.fotografia))
                     {
-                        photo = producto.fotografia.GetBytes();
+                        photo = producto.fotografia.Encode().GetBytes();
                     }
                     
                     conn.Open();
@@ -551,11 +551,11 @@ namespace Elestor.Intake.API.DataAccess
                 {
                     if(negocio.fotografia != null || !string.IsNullOrEmpty(negocio.fotografia))
                     {
-                        photo = negocio.fotografia.GetBytes();
+                        photo = negocio.fotografia.Encode().GetBytes();
                     }
                     if (negocio.fotografia2 != null || !string.IsNullOrEmpty(negocio.fotografia2))
                     {
-                        photo2 = negocio.fotografia2.GetBytes();
+                        photo2 = negocio.fotografia2.Encode().GetBytes();
                     }
                     
                   

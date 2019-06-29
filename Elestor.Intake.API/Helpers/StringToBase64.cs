@@ -8,13 +8,9 @@ namespace Elestor.Intake.API.Helpers
      
         public static byte[] GetBytes(this string str)
         {
-
-            string b64 = string.Empty;
-            b64 = str.Encode();
-
             try
             {
-                return System.Convert.FromBase64String(b64);
+                return System.Convert.FromBase64String(str);
             }
             catch(Exception ex)
             {
