@@ -25,6 +25,7 @@ namespace Elestor.Intake.API.Models
         public string latitud { get; set; } = string.Empty;
         public string longitud { get; set; } = string.Empty;
         public int active { get; set; } = 1;
+        public int id_negocio { get; set; } = 1;
         public byte[] fotografia { get; set; } = new byte[] { };
         public byte[] fotografia2 { get; set; } = new byte[] { };
         //public string fotografia { get; set; } = string.Empty;

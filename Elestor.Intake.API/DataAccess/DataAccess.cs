@@ -125,10 +125,10 @@ namespace Elestor.Intake.API.DataAccess
                             //}
                             
                         }
-                        else
-                        {
-                            result.AsList()[0].negocio = new List<Negocio>();
-                        }
+                        //else
+                        //{
+                        //    return null; 
+                        //}
 
                         userResponse = ToResponseUser((List<UsuarioResponse>)result);
 
@@ -674,6 +674,7 @@ namespace Elestor.Intake.API.DataAccess
                 }
                );
             }
+            else { }
 
             return lstUsuario;
         }
@@ -740,6 +741,7 @@ namespace Elestor.Intake.API.DataAccess
                         latitud = item.latitud,
                         longitud = item.longitud,
                         active = item.active,
+                        id_negocio = item.id_negocio,
                         fotografia = item.fotografia.GetString().Decode(),
                         fotografia2 = item.fotografia2.GetString().Decode()
                     });
