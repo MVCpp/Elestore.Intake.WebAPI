@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Elestor.Intake.API.Helpers;
 using Elestor.Intake.API.Interfaces;
+using Elestor.Intake.API.Log;
 using Elestor.Intake.API.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,11 +16,14 @@ namespace Elestor.Intake.API.Controllers
     public class LoginController : Controller
     {
         readonly ILogin _login;
+        readonly ILog _log;
         private Usuario usuario;
 
-        public LoginController(ILogin login)
+        public LoginController(ILogin login, ILog log)
         {
             _login = login ?? throw new ArgumentNullException(nameof(login), "Cannot be null.");
+            _log = log ?? throw new ArgumentNullException(nameof(log), "Cannot be null.");
+
             usuario = new Usuario();
         }
 
@@ -28,18 +32,20 @@ namespace Elestor.Intake.API.Controllers
         {
             object response = null;
 
-                if (userModel == null)
+            if (userModel == null)
             {
+                _log.Error(nameof(userModel).ToString() +  "Cannot be null.");
                 throw new ArgumentNullException(nameof(userModel), "Cannot be null.");
             }
 
             try
             {
                 response = await _login.Login(userModel);
-
+                _log.Information("Response from IniciarSesion");
             }
             catch (Exception e)
             {
+                _log.Error(e.ToString());
 
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {

@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Elestor.Intake.API.Interfaces;
+using Elestor.Intake.API.Log;
 using Elestor.Intake.API.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,10 +14,12 @@ namespace Elestor.Intake.API.Controllers
     public class RecuperarCuentaController : Controller
     {
         readonly IRecuperarCuenta _recuperarCuenta;
+        readonly ILog _log;
 
-        public RecuperarCuentaController(IRecuperarCuenta recuperarCuenta)
+        public RecuperarCuentaController(IRecuperarCuenta recuperarCuenta, ILog log)
         {
-            _recuperarCuenta = recuperarCuenta ?? throw new ArgumentNullException(nameof(recuperarCuenta), "Cannot be null."); ;
+            _recuperarCuenta = recuperarCuenta ?? throw new ArgumentNullException(nameof(recuperarCuenta), "Cannot be null.");
+            _log = log ?? throw new ArgumentNullException(nameof(log), "Cannot be null.");
         }
 
         [HttpPost("recuperar")]
@@ -24,6 +27,7 @@ namespace Elestor.Intake.API.Controllers
         {
             if (userModel == null)
             {
+                _log.Error(nameof(userModel).ToString() + "Cannot be null.");
                 throw new ArgumentNullException(nameof(userModel), "Cannot be null.");
             }
 
@@ -31,9 +35,12 @@ namespace Elestor.Intake.API.Controllers
             try
             {
                 response = await _recuperarCuenta.RecuperarCuenta(userModel);
+                _log.Information("Response from RecuperarCuenta");
             }
             catch (Exception e)
             {
+                _log.Error(e.ToString());
+
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
                     Content = new StringContent(e.Message),
@@ -51,6 +58,7 @@ namespace Elestor.Intake.API.Controllers
 
             if (userModel == null)
             {
+                _log.Error(nameof(userModel).ToString() + "Cannot be null.");
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
                     Content = new StringContent(nameof(userModel) + "Cannot be null."),
@@ -61,9 +69,12 @@ namespace Elestor.Intake.API.Controllers
             try
             {
                 response = await _recuperarCuenta.Actualizar(userModel);
+                _log.Information("Response from RecuperarCuenta");
             }
             catch (Exception e)
             {
+                _log.Error(e.ToString());
+
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
                     Content = new StringContent(e.Message),

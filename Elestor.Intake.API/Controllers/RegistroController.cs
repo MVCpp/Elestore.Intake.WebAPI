@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Elestor.Intake.API.Interfaces;
+using Elestor.Intake.API.Log;
 using Elestor.Intake.API.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -20,13 +21,15 @@ namespace Elestor.Intake.API.Controllers
     {
         readonly IRegistro _registro;
         readonly ILogin _login;
+        readonly ILog _log;
 
         static HttpClient client = new HttpClient();
 
-        public RegistroController(IRegistro registro, ILogin login)
+        public RegistroController(IRegistro registro, ILogin login, ILog log)
         {
             _registro = registro ?? throw new ArgumentNullException(nameof(registro), "Cannot be null.");
             _login = login ?? throw new ArgumentNullException(nameof(login), "Cannot be null.");
+            _log = log ?? throw new ArgumentNullException(nameof(log), "Cannot be null.");
         }
 
         [HttpPost("usuario")]
@@ -37,6 +40,7 @@ namespace Elestor.Intake.API.Controllers
 
             if (userModel == null)
             {
+                _log.Error(nameof(userModel).ToString() + "Cannot be null.");
                 throw new ArgumentNullException(nameof(userModel), "Cannot be null.");
             }
 
@@ -45,7 +49,9 @@ namespace Elestor.Intake.API.Controllers
             {
                 response = await _registro.Registro(userModel);
 
-                if(Convert.ToBoolean(response))
+                _log.Information("Response from Registro");
+
+                if (Convert.ToBoolean(response))
                 {
                     //usuario = await _login.Login(userModel);
 
@@ -56,6 +62,8 @@ namespace Elestor.Intake.API.Controllers
             }
             catch (Exception e)
             {
+                _log.Error(e.ToString());
+
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
                     Content = new StringContent(e.Message),
@@ -72,6 +80,7 @@ namespace Elestor.Intake.API.Controllers
 
             if (string.IsNullOrEmpty(email))
             {
+                _log.Error(nameof(email).ToString() + "Cannot be null.");
                 throw new ArgumentNullException(nameof(email), "Cannot be null.");
             }
 
@@ -82,9 +91,13 @@ namespace Elestor.Intake.API.Controllers
                 client.PostAsJsonAsync("https://localhost:5002/api/correo/enviar", email);
                 response.EnsureSuccessStatusCode();
                 ret = 1;
+
+                _log.Information("Response from EnviarCorreo");
             }
-            catch(Exception ex)
+            catch(Exception e)
             {
+                _log.Error(e.ToString());
+
                 ret = 1;
             }
 

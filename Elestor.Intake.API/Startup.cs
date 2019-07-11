@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Elestor.Intake.API.Interfaces;
+using Elestor.Intake.API.Log;
 using Elestor.Intake.API.Managers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NLog;
 
 namespace Elestor.Intake.API
 {
@@ -19,6 +23,8 @@ namespace Elestor.Intake.API
 
         public Startup(IConfiguration configuration)
         {
+            LogManager.LoadConfiguration(System.String.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
+            
             Configuration = configuration;
         }
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -35,6 +41,7 @@ namespace Elestor.Intake.API
             services.AddTransient<INegocio, NegocioManager>();
             services.AddTransient<IProducto, ProductoManager>();
             services.AddTransient<IDataAccess, DataAccess.DataAccess>();
+            services.AddSingleton<ILog, Log.Log>();
 
         }
 
@@ -45,7 +52,7 @@ namespace Elestor.Intake.API
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
             app.UseCors(builder => builder
                         .AllowAnyOrigin()
                         .AllowAnyMethod()

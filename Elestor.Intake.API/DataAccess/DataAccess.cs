@@ -9,17 +9,20 @@ using System.Data.SqlClient;
 using System.Data;
 using Elestor.Intake.API.Helpers;
 using System.Linq;
+using Elestor.Intake.API.Log;
 
 namespace Elestor.Intake.API.DataAccess
 {
     public class DataAccess : IDataAccess
     {
+
+        readonly ILog _log;
         /// <summary>
         /// Initializes a new instance of the <see cref="T:Elestor.Intake.API.DataAccess.DataAccess"/> class.
         /// </summary>
-        public DataAccess()
+        public DataAccess(ILog log)
         {
-
+            _log = log;
         }
         /// <summary>
         /// Gets the connection.
@@ -40,61 +43,62 @@ namespace Elestor.Intake.API.DataAccess
         /// <param name="usuario">Usuario.</param>
         public async Task<bool> Registro(Usuario usuario)
         {
-                bool ret = false;
+            bool ret = false;
 
-                byte[] photo = { };
+            byte[] photo = { };
 
-                if (usuario.fotografia != null)
+            if (usuario.fotografia != null)
+            {
+
+                photo = usuario.fotografia.Encode().GetBytes();
+            }
+
+                try
                 {
-
-                    photo = usuario.fotografia.Encode().GetBytes();
-                }
-
-                    try
+                    using (MySqlConnection conn = new MySqlConnection(Constants.ConnectionString))
                     {
-                        using (MySqlConnection conn = new MySqlConnection(Constants.ConnectionString))
+                        using (MySqlCommand cmd = new MySqlCommand("usp_Usuario_Insert", conn))
                         {
-                            using (MySqlCommand cmd = new MySqlCommand("usp_Usuario_Insert", conn))
-                            {
-                                cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                                cmd.CommandTimeout = 0;
+                            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                            cmd.CommandTimeout = 0;
 
-                                conn.Open();
-                                var guid = System.Guid.NewGuid();
+                            conn.Open();
+                            var guid = System.Guid.NewGuid();
 
-                                cmd.Parameters.Add(new MySqlParameter("thisnombre", usuario.nombre));
-                                cmd.Parameters.Add(new MySqlParameter("thisapellidoPaterno", usuario.apellidoPaterno));
-                                cmd.Parameters.Add(new MySqlParameter("thisapellidoMaterno", usuario.apellidoMaterno));
-                                cmd.Parameters.Add(new MySqlParameter("thisnombreUsuario", usuario.nombreUsuario));
-                                cmd.Parameters.Add(new MySqlParameter("thispassword", usuario.password));
-                                cmd.Parameters.Add(new MySqlParameter("thisemail", usuario.email));
-                                cmd.Parameters.Add(new MySqlParameter("thisnumeroTelefonico", usuario.numeroTelefonico));
-                                cmd.Parameters.Add(new MySqlParameter("thisfotografia", photo));
-                                cmd.Parameters.Add(new MySqlParameter("thisestatus", 0));
-                                cmd.Parameters.Add(new MySqlParameter("thisclientid", guid.ToString()));
+                            cmd.Parameters.Add(new MySqlParameter("thisnombre", usuario.nombre));
+                            cmd.Parameters.Add(new MySqlParameter("thisapellidoPaterno", usuario.apellidoPaterno));
+                            cmd.Parameters.Add(new MySqlParameter("thisapellidoMaterno", usuario.apellidoMaterno));
+                            cmd.Parameters.Add(new MySqlParameter("thisnombreUsuario", usuario.nombreUsuario));
+                            cmd.Parameters.Add(new MySqlParameter("thispassword", usuario.password));
+                            cmd.Parameters.Add(new MySqlParameter("thisemail", usuario.email));
+                            cmd.Parameters.Add(new MySqlParameter("thisnumeroTelefonico", usuario.numeroTelefonico));
+                            cmd.Parameters.Add(new MySqlParameter("thisfotografia", photo));
+                            cmd.Parameters.Add(new MySqlParameter("thisestatus", 0));
+                            cmd.Parameters.Add(new MySqlParameter("thisclientid", guid.ToString()));
 
 
-                                var some =  await cmd.ExecuteScalarAsync();
+                            var some =  await cmd.ExecuteScalarAsync();
                                 
-                                    if(some == null)
-                                    {
-                                        ret = false;
-                                    }
-                                    else
-                                    {
-                                        ret = true;
-                                    }
+                                if(some == null)
+                                {
+                                    ret = false;
+                                }
+                                else
+                                {
+                                    ret = true;
+                                }
 
-                                conn.Close();
-                            }
+                            conn.Close();
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        ret = false;
-                    }
+                }
+                catch (Exception ex)
+                {
+                    _log.Error("Task<bool> Registro(Usuario usuario) " + ex.ToString());
+                    ret = false;
+                }
 
-                return ret;
+            return ret;
         }
         /// <summary>
         /// Login the specified usuario.
@@ -145,6 +149,7 @@ namespace Elestor.Intake.API.DataAccess
                 }
                 catch (Exception ex)
                 {
+                    _log.Error("Task<IEnumerable<Usuario>> Login(Usuario usuario) " + ex.ToString());
                     Console.Write(ex.Message);
                 }
                 return null;
@@ -185,6 +190,7 @@ namespace Elestor.Intake.API.DataAccess
                     }
                     catch (Exception ex)
                     {
+                        _log.Error(" Task<object> RecuperarCuenta(Usuario usuario) " + ex.ToString());
                         ret = ex.Message;
                     }
                 });
@@ -243,6 +249,7 @@ namespace Elestor.Intake.API.DataAccess
                     }
                     catch (Exception ex)
                     {
+                        _log.Error("Task<object> AgregarNegocio(Negocio negocio) " + ex.ToString());
                         ret = ex.Message;
                     }
                 });
@@ -275,6 +282,7 @@ namespace Elestor.Intake.API.DataAccess
             }
             catch (Exception ex)
             {
+                _log.Error("Task<IEnumerable<Negocio>> ObtenerNegocio(string clientid) " + ex.ToString());
                 return  null;
             }
         }
@@ -306,6 +314,7 @@ namespace Elestor.Intake.API.DataAccess
             }
             catch (Exception ex)
             {
+                _log.Error("Task<IEnumerable<Negocio>> ObtenerNegocios() " + ex.ToString());
                 return null;
             }
         }
@@ -357,6 +366,7 @@ namespace Elestor.Intake.API.DataAccess
                 }
                 catch (Exception ex)
                 {
+                    _log.Error("Task<object> Actualizar(Usuario usuario) " + ex.ToString());
                     ret = ex.Message;
                 }
            
@@ -382,6 +392,7 @@ namespace Elestor.Intake.API.DataAccess
             }
             catch (Exception ex)
             {
+                _log.Error("Task<IEnumerable<CatNegocio>> ObtenerCatNegocio() " + ex.ToString());
                 return null;
             }
         }
@@ -406,6 +417,7 @@ namespace Elestor.Intake.API.DataAccess
             }
             catch (Exception ex)
             {
+                _log.Error("Task<IEnumerable<SubCatNegocio>> ObtenerSubCatNegocio(int id) " + ex.ToString());
                 return null;
             }
         }
@@ -435,6 +447,7 @@ namespace Elestor.Intake.API.DataAccess
             }
             catch (Exception ex)
             {
+                _log.Error("Task<IEnumerable<Producto>> ObtenerProductos(Negocio negocio) " + ex.ToString());
                 return null;
             }
         }
@@ -485,6 +498,7 @@ namespace Elestor.Intake.API.DataAccess
                 }
                 catch (Exception ex)
                 {
+                    _log.Error("Task<object> GuardarProducto(Producto producto) " + ex.ToString());
                     return null;
                 }
 
@@ -540,6 +554,7 @@ namespace Elestor.Intake.API.DataAccess
             }
             catch (Exception ex)
             {
+                _log.Error("Task<object> EditarProducto(Producto producto) " + ex.ToString());
                 return null;
             }
 
@@ -595,6 +610,7 @@ namespace Elestor.Intake.API.DataAccess
             }
             catch (Exception ex)
             {
+                _log.Error("Task<object> NegocioEditar(Negocio negocio) " + ex.ToString());
                 return 0;
             }
         }
@@ -628,6 +644,7 @@ namespace Elestor.Intake.API.DataAccess
             }
             catch (Exception ex)
             {
+                _log.Error("Task<IEnumerable<Producto>> BorrarProducto(Producto producto) " + ex.ToString());
                 return null;
             }
         }
@@ -652,6 +669,7 @@ namespace Elestor.Intake.API.DataAccess
             }
             catch (Exception ex)
             {
+                _log.Error("Task<IEnumerable<CatProducto>> ObtnerCatProductoPorIdCatNegocio(string categoria) " + ex.ToString());
                 return null;
             }
         }

@@ -1,0 +1,12 @@
+2019-07-11 13:19:39.8174 Info Message Template Auto Format enabled
+2019-07-11 13:19:39.8570 Info Loading assembly: NLog.Web.AspNetCore
+2019-07-11 13:19:40.7742 Error Parsing configuration from C:\Users\MiguelVazquez\Desktop\api\Elestor.Intake.API/nlog.config failed. Exception: NLog.NLogConfigurationException: Exception when parsing C:\Users\MiguelVazquez\Desktop\api\Elestor.Intake.API/nlog.config.  ---> System.ArgumentException: Target cannot be found: 'EventLog'
+   at NLog.Config.Factory`2.CreateInstance(String itemName)
+   at NLog.Config.LoggingConfigurationParser.ParseTargetsElement(ILoggingConfigurationElement targetsElement)
+   at NLog.Config.LoggingConfigurationParser.ParseNLogSection(ILoggingConfigurationElement configSection)
+   at NLog.Config.LoggingConfigurationParser.LoadConfig(ILoggingConfigurationElement nlogConfig, String basePath)
+   at NLog.Config.XmlLoggingConfiguration.ParseNLogElement(ILoggingConfigurationElement nlogElement, String filePath, Boolean autoReloadDefault)
+   at NLog.Config.XmlLoggingConfiguration.Initialize(XmlReader reader, String fileName, Boolean ignoreErrors)
+   --- End of inner exception stack trace ---
+2019-07-11 13:19:40.7810 Warn Failed loading config from C:\Users\MiguelVazquez\Desktop\api\Elestor.Intake.API/nlog.config. Invalid XML?
+2019-07-11 13:19:40.8132 Info Found 0 configuration items

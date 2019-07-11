@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Elestor.Intake.API.Helpers;
 using Elestor.Intake.API.Interfaces;
+using Elestor.Intake.API.Log;
 using Elestor.Intake.API.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,10 +16,12 @@ namespace Elestor.Intake.API.Controllers
     public class NegocioController
     {
         readonly INegocio _negocio;
+        readonly ILog _log;
 
-        public NegocioController(INegocio negocio)
+        public NegocioController(INegocio negocio, ILog log)
         {
-            _negocio = negocio;
+            _negocio = negocio ?? throw new ArgumentNullException(nameof(negocio), "Cannot be null.");
+            _log = log ?? throw new ArgumentNullException(nameof(log), "Cannot be null.");
         }
 
         [HttpPost("agregar")]
@@ -28,15 +31,18 @@ namespace Elestor.Intake.API.Controllers
 
             if (negocio == null)
             {
+                _log.Error(nameof(negocio).ToString() + "Cannot be null.");
                 throw new ArgumentNullException(nameof(negocio), "Cannot be null.");
             }
 
             try
             {
                 response = await _negocio.AgregarNegocio(negocio);
+                _log.Information("Response from AgregarNegocio");
             }
             catch (Exception e)
             {
+                _log.Error(e.ToString());
 
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
@@ -54,15 +60,18 @@ namespace Elestor.Intake.API.Controllers
 
             if (string.IsNullOrEmpty(clientid))
             {
+                _log.Error(nameof(clientid).ToString() + "Cannot be null.");
                 throw new ArgumentNullException(nameof(clientid), "Cannot be null.");
             }
 
             try
             {
-               response = await _negocio.ObtenerNegocio(clientid);
+                response = await _negocio.ObtenerNegocio(clientid);
+                _log.Information("Response from ObtenerNegocio");
             }
             catch (Exception e)
             {
+                _log.Error(e.ToString());
 
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
@@ -79,11 +88,13 @@ namespace Elestor.Intake.API.Controllers
             object response = null;
 
             try
-            {
+            {                
                 response = await _negocio.ObtenerNegocios();
+                _log.Information("Response from ObtenerNegocio");
             }
             catch (Exception e)
             {
+                _log.Error(e.ToString());
 
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
@@ -100,13 +111,14 @@ namespace Elestor.Intake.API.Controllers
         {
             object response = null;
 
-
             try
             {
                 response = await _negocio.ObtenerCatNegocio();
+                _log.Information("Response from ObtenerCatNegocio");
             }
             catch (Exception e)
             {
+                _log.Error(e.ToString());
 
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
@@ -125,9 +137,11 @@ namespace Elestor.Intake.API.Controllers
             try
             {
                 response = await _negocio.ObtenerSubCatNegocio(id);
+                _log.Information("Response from ObtenerSubCatNegocio");
             }
             catch (Exception e)
             {
+                _log.Error(e.ToString());
 
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
@@ -145,15 +159,18 @@ namespace Elestor.Intake.API.Controllers
 
             if (negocio == null)
             {
+                _log.Error(nameof(negocio).ToString() + "Cannot be null.");
                 throw new ArgumentNullException(nameof(negocio), "Cannot be null.");
             }
 
             try
             {
                 response = await _negocio.NegocioEditar(negocio);
+                _log.Information("Response from NegocioEditar");
             }
             catch (Exception e)
             {
+                _log.Error(e.ToString());
 
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
