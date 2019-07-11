@@ -74,11 +74,18 @@ namespace Elestor.Intake.API.DataAccess
                                 cmd.Parameters.Add(new MySqlParameter("thisclientid", guid.ToString()));
 
 
-                                await cmd.ExecuteNonQueryAsync();
+                                var some =  await cmd.ExecuteScalarAsync();
+                                
+                                    if(some == null)
+                                    {
+                                        ret = false;
+                                    }
+                                    else
+                                    {
+                                        ret = true;
+                                    }
+
                                 conn.Close();
-
-                                ret = true;
-
                             }
                         }
                     }
