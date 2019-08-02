@@ -19,7 +19,6 @@ namespace Elestor.Intake.API
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseKestrel()
                 .UseStartup<Startup>()
                 .UseUrls("https://*:5001", "http://*:5000");
     }

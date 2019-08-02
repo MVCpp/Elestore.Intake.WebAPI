@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Elestor.Intake.API.Interfaces;
 using Elestor.Intake.API.Log;
 using Elestor.Intake.API.Managers;
+using Elestor.Intake.API.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -31,6 +33,20 @@ namespace Elestor.Intake.API
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.Configure<OktaSettings>(Configuration.GetSection("Okta"));
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.Authority = "https://dev-112778.okta.com/oauth2/default";
+                options.Audience = "api://default";
+                options.RequireHttpsMetadata = false;
+            });
+
             services.AddCors();
             services.AddMvc();
             services.AddOptions();
@@ -52,7 +68,9 @@ namespace Elestor.Intake.API
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
+            app.UseAuthentication();
+
             app.UseCors(builder => builder
                         .AllowAnyOrigin()
                         .AllowAnyMethod()
