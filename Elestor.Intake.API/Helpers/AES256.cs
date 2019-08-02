@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Elestor.Intake.API.Helpers
 {
-    public class AES256
+    public static class AES256
     {
         /// <summary>
         /// Key encription for generate the strings in the class
@@ -17,7 +17,7 @@ namespace Elestor.Intake.API.Helpers
         /// </summary>
         /// <param name="encryptString">string who was processed for encrypt</param>
         /// <returns></returns>
-        public static string Encrypt(string encryptString)
+        public static string Encrypt(this string encryptString)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace Elestor.Intake.API.Helpers
         /// </summary>
         /// <param name="cipherText">string encrypted</param>
         /// <returns>string decrypted</returns>
-        public static string Decrypt(string cipherText)
+        public static string Decrypt(this string cipherText)
         {
             try
             {
