@@ -7,6 +7,7 @@ using Elestor.Intake.API.Helpers;
 using Elestor.Intake.API.Interfaces;
 using Elestor.Intake.API.Log;
 using Elestor.Intake.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Elestor.Intake.API.Controllers
@@ -56,8 +57,7 @@ namespace Elestor.Intake.API.Controllers
             return response;
         }
 
-
-
+        [Authorize]
         [HttpPost("hola")]
         public string hola()
         {
