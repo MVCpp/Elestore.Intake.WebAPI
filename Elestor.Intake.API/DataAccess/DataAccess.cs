@@ -32,8 +32,7 @@ namespace Elestor.Intake.API.DataAccess
         {
             get
             {
-            return new MySqlConnection(Constants.ConnectionString);
-
+                return new MySqlConnection(Constants.ConnectionString); 
             }
         }
         /// <summary>
@@ -69,8 +68,8 @@ namespace Elestor.Intake.API.DataAccess
                             cmd.Parameters.Add(new MySqlParameter("thisapellidoPaterno", usuario.apellidoPaterno));
                             cmd.Parameters.Add(new MySqlParameter("thisapellidoMaterno", usuario.apellidoMaterno));
                             cmd.Parameters.Add(new MySqlParameter("thisnombreUsuario", usuario.nombreUsuario));
-                            cmd.Parameters.Add(new MySqlParameter("thispassword", usuario.password));
-                            cmd.Parameters.Add(new MySqlParameter("thisemail", usuario.email));
+                            cmd.Parameters.Add(new MySqlParameter("thispassword", usuario.password.Encrypt()));
+                            cmd.Parameters.Add(new MySqlParameter("thisemail", usuario.email.Encrypt()));
                             cmd.Parameters.Add(new MySqlParameter("thisnumeroTelefonico", usuario.numeroTelefonico));
                             cmd.Parameters.Add(new MySqlParameter("thisfotografia", photo));
                             cmd.Parameters.Add(new MySqlParameter("thisestatus", 0));
@@ -118,7 +117,7 @@ namespace Elestor.Intake.API.DataAccess
                         
                         userResponse = new List<Usuario>();
 
-                        var result = await conn.QueryAsync<UsuarioResponse>("usp_Usuario_Select",new {thispassword = usuario.password, thisemail = usuario.email},null,3000000,CommandType.StoredProcedure);
+                        var result = await conn.QueryAsync<UsuarioResponse>("usp_Usuario_Select",new {thispassword = usuario.password.Encrypt(), thisemail = usuario.email.Encrypt()},null,3000000,CommandType.StoredProcedure);
 
                         if(result.AsList().Count > 0)
                         {
@@ -179,8 +178,8 @@ namespace Elestor.Intake.API.DataAccess
 
                                 conn.Open();
 
-                                cmd.Parameters.Add(new MySqlParameter("thispassword", usuario.password));
-                                cmd.Parameters.Add(new MySqlParameter("thisemail", usuario.email));
+                                cmd.Parameters.Add(new MySqlParameter("thispassword", usuario.password.Encrypt()));
+                                cmd.Parameters.Add(new MySqlParameter("thisemail", usuario.email.Encrypt()));
 
                                 ret = cmd.ExecuteNonQuery();
                                 conn.Close();
@@ -350,8 +349,8 @@ namespace Elestor.Intake.API.DataAccess
                             cmd.Parameters.Add(new MySqlParameter("thisapellidoPaterno", usuario.apellidoPaterno));
                             cmd.Parameters.Add(new MySqlParameter("thisapellidoMaterno", usuario.apellidoMaterno));
                             cmd.Parameters.Add(new MySqlParameter("thisnombreUsuario", usuario.nombreUsuario));
-                            cmd.Parameters.Add(new MySqlParameter("thispassword", usuario.password));
-                            cmd.Parameters.Add(new MySqlParameter("thisemail", usuario.email));
+                            cmd.Parameters.Add(new MySqlParameter("thispassword", usuario.password.Encrypt()));
+                            cmd.Parameters.Add(new MySqlParameter("thisemail", usuario.email.Encrypt()));
                             cmd.Parameters.Add(new MySqlParameter("thisnumeroTelefonico", usuario.numeroTelefonico));
                             cmd.Parameters.Add(new MySqlParameter("thisestatus", 1));
                             cmd.Parameters.Add(new MySqlParameter("thisclientid", usuario.clientid));

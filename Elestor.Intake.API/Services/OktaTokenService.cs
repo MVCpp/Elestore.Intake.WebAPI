@@ -12,6 +12,7 @@ namespace Elestor.Intake.API.Services
 {
     public class OktaTokenService : ITokenService
     {
+
         private OktaToken token = new OktaToken();
         private readonly IOptions<OktaSettings> oktaSettings;
 
