@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Elestor.Intake.API.Interfaces;
 using Elestor.Intake.API.Log;
 using Elestor.Intake.API.Managers;
 using Elestor.Intake.API.Models;
+using Elestor.Intake.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using NLog;
 
 namespace Elestor.Intake.API
@@ -33,23 +28,21 @@ namespace Elestor.Intake.API
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
 
             services.Configure<OktaSettings>(Configuration.GetSection("Okta"));
 
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(options =>
             {
                 options.Authority = "https://dev-112778.okta.com/oauth2/default";
-                options.Audience = "api://default";
+                options.Audience = "all";
                 options.RequireHttpsMetadata = false;
             });
-
-            services.AddCors();
-            services.AddMvc();
-            services.AddOptions();
 
             services.AddTransient<ILogin, LoginManager>();
             services.AddTransient<IRecuperarCuenta, RecuperarCuentaManager>();
@@ -58,7 +51,10 @@ namespace Elestor.Intake.API
             services.AddTransient<IProducto, ProductoManager>();
             services.AddTransient<IDataAccess, DataAccess.DataAccess>();
             services.AddSingleton<ILog, Log.Log>();
+            services.AddSingleton<ITokenService, OktaTokenService>();
 
+            services.AddOptions();
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,7 +65,7 @@ namespace Elestor.Intake.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseAuthentication();
+        
 
             app.UseCors(builder => builder
                         .AllowAnyOrigin()
@@ -77,8 +73,9 @@ namespace Elestor.Intake.API
                         .AllowAnyHeader()
                         .AllowCredentials());
 
-
+            app.UseAuthentication();
             app.UseMvc();
+
         }
     }
 }

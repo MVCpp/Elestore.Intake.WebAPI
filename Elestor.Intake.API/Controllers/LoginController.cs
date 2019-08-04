@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Elestor.Intake.API.Helpers;
 using Elestor.Intake.API.Interfaces;
 using Elestor.Intake.API.Log;
 using Elestor.Intake.API.Models;
@@ -12,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Elestor.Intake.API.Controllers
 {
+    [Authorize]
     [Produces("application/json")]
     [Route("api/usuario")]
     public class LoginController : Controller
@@ -57,7 +56,6 @@ namespace Elestor.Intake.API.Controllers
             return response;
         }
 
-        [Authorize]
         [HttpPost("hola")]
         public string hola()
         {
