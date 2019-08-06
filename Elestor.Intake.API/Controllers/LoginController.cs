@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Elestor.Intake.API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Produces("application/json")]
     [Route("api/usuario")]
     public class LoginController : Controller

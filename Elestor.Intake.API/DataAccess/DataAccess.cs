@@ -691,7 +691,7 @@ namespace Elestor.Intake.API.DataAccess
                     nombreUsuario = usuario[0].nombreUsuario,
                     password = usuario[0].password,
                     confirmPassword = usuario[0].confirmPassword,
-                    email = usuario[0].email,
+                    email = usuario[0].email.Decrypt(),
                     numeroTelefonico = usuario[0].numeroTelefonico,
                     fotografia = usuario[0].fotografia.GetString().Decode(),
                     negocio = usuario[0].negocio
