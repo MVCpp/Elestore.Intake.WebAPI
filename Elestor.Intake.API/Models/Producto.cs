@@ -20,7 +20,6 @@ namespace Elestor.Intake.API.Models
         public string otracategoria { get; set; } = String.Empty;
         public double precio { get; set; } = 0.0;
         public double tiempopreparacion { get; set; } = 0.0;
-        
-        
+        public int FK_idNegocio { get; set; } = 0;
     }
 }

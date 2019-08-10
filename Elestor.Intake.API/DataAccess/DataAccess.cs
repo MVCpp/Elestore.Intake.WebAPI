@@ -485,7 +485,8 @@ namespace Elestor.Intake.API.DataAccess
                                     , tiempopreparacion = producto.tiempopreparacion
                                     , otracategoria = producto.otracategoria
                                     , id_catProducto = producto.id_catProducto
-                                    , complemento = producto.complemento}
+                                    , complemento = producto.complemento
+                                    , FK_idNegocio = producto.FK_idNegocio}
                                     ,null,30000,CommandType.StoredProcedure);
                         conn.Close();
 
